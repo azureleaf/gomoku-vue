@@ -1,8 +1,29 @@
 # gomoku-vue
 
-Play against the computer player at Gomoku board game (Vue.js)
+## Project setup
+```
+npm install
+```
 
-## Installation
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-- No installation required; just open `index.html`
+### Compiles and minifies for production
+```
+npm run build
+```
 
+### Run your unit tests
+```
+npm run test:unit
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
