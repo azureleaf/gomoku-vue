@@ -1,5 +1,5 @@
 <template>
-  <span class="square">a</span>
+  <span class="square" @click="log()"></span>
 </template>
 
 <script>
@@ -8,13 +8,19 @@ export default {
   props: {
     rowIndex: Number,
     colIndex: Number
+  },
+  methods: {
+    log: function() {
+      console.log(this.rowIndex, this.colIndex, "clicked!");
+    }
   }
 };
 </script>
 
 <style scoped lang="stylus">
-div.square
+span.square
+  display: inline-block
   height: 20px
   width: 20px
-  border: solid 1px black
+  border: solid 1px blue
 </style>

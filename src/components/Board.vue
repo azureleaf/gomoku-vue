@@ -27,4 +27,8 @@ export default {
 };
 </script>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+div.board
+  margin: 0
+  padding: 0
+</style>
