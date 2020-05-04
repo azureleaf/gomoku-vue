@@ -38,13 +38,14 @@ export default {
       }
       this.boardStatus.push(row);
     }
-    console.log(this.boardStatus);
   }
 };
 </script>
 
 <style scoped lang="stylus">
 div.board
-  margin: 0
-  padding: 0
+  display inline-block
+  margin 0
+  padding 0
+  border solid 2px grey
 </style>
