@@ -6,6 +6,7 @@
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
+        @detectSquareUpdate="updateBoardStatus($event)"
       >
       </Square>
     </div>
@@ -29,6 +30,12 @@ export default {
       boardStatus: []
     };
   },
+  methods: {
+    updateBoardStatus(pos) {
+      this.boardStatus[pos.row][pos.col] = pos.content;
+      console.log(this.boardStatus);
+    }
+  },
   mounted() {
     // Init the board status
     for (let i = 0; i < this.boardHeight; i++) {
@@ -47,5 +54,5 @@ div.board
   display inline-block
   margin 0
   padding 0
-  border solid 2px grey
+  border solid 2px deepskyblue
 </style>
