@@ -1,11 +1,11 @@
 <template>
   <div class="board">
-    <div v-for="rowIndex in boardHeight" :key="rowIndex">
+    <div v-for="rowIndex in boardHeight" :key="rowIndex - 1">
       <Square
         v-for="colIndex in boardWidth"
-        :key="colIndex"
-        :rowIndex="rowIndex"
-        :colIndex="colIndex"
+        :key="(rowIndex - 1) * 100 + (colIndex - 1)"
+        :rowIndex="rowIndex - 1"
+        :colIndex="colIndex - 1"
       >
       </Square>
     </div>
@@ -23,6 +23,22 @@ export default {
   props: {
     boardHeight: Number,
     boardWidth: Number
+  },
+  data() {
+    return {
+      boardStatus: []
+    };
+  },
+  mounted() {
+    // Init the board status
+    for (let i = 0; i < this.boardHeight; i++) {
+      let row = [];
+      for (let j = 0; j < this.boardWidth; j++) {
+        row.push("");
+      }
+      this.boardStatus.push(row);
+    }
+    console.log(this.boardStatus);
   }
 };
 </script>
