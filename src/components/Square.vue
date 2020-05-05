@@ -9,18 +9,18 @@ export default {
   name: "Square",
   props: {
     rowIndex: Number,
-    colIndex: Number,
-    nextPlayer: String
+    colIndex: Number
   },
   data() {
     return {
-      content: "",
-      squareStyle: "color: red;"
+      content: ""
     };
   },
-  // computed: {
-  //   squareStyle() {}
-  // },
+  computed: {
+    squareStyle() {
+      return this.$store.state.isOsTurn ? "color: red;" : "color: green;";
+    }
+  },
   methods: {
     handleSquareClick: function() {
       // Update only when the square is empty
@@ -46,16 +46,15 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-span.square {
-  display: inline-block;
-  font-family: 'Noto Sans CJK JP', sans-serif;
-  height: 20px;
-  width: 20px;
-  padding: 5px;
-  margin: auto;
-  font-weight: bold;
-  text-align: center;
-  vertical-align: middle;
-  border: solid 1px deepskyblue;
-}
+span.square
+  display inline-block
+  font-family 'Noto Sans CJK JP', sans-serif
+  height 20px
+  width 20px
+  padding 5px
+  margin auto
+  font-weight bold
+  text-align center
+  vertical-align middle
+  border solid 1px deepskyblue
 </style>

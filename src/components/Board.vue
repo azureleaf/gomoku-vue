@@ -6,8 +6,6 @@
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
-        :nextPlayer="nextPlayer"
-        @detectSquareUpdate="updateBoardStatus($event)"
       >
       </Square>
     </div>
@@ -22,34 +20,13 @@ export default {
   components: {
     Square
   },
-  props: {
-    boardHeight: Number,
-    boardWidth: Number
-  },
   data() {
     return {
-      boardStatus: [],
-      history: [],
-      nextPlayer: "O"
+      boardHeight: this.$store.state.boardSize.height,
+      boardWidth: this.$store.state.boardSize.width
     };
   },
-  methods: {
-    updateBoardStatus(pos) {
-      this.boardStatus[pos.row][pos.col] = pos.content;
-      console.log(this.boardStatus);
-      this.nextPlayer = this.nextPlayer == "O" ? "X" : "O";
-    }
-  },
-  mounted() {
-    // Init the board status
-    for (let i = 0; i < this.boardHeight; i++) {
-      let row = [];
-      for (let j = 0; j < this.boardWidth; j++) {
-        row.push("");
-      }
-      this.boardStatus.push(row);
-    }
-  }
+  methods: {}
 };
 </script>
 

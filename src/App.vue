@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>{{ title }}</h1>
-    <Board :boardHeight="boardHeight" :boardWidth="boardWidth"></Board>
+    <Board></Board>
     <Panel></Panel>
   </div>
 </template>
@@ -18,9 +18,7 @@ export default {
   },
   data: function() {
     return {
-      title: "Gomoku",
-      boardHeight: 10,
-      boardWidth: 10
+      title: "Gomoku"
     };
   },
   mounted: function() {
