@@ -9,7 +9,8 @@ export default {
   name: "Square",
   props: {
     rowIndex: Number,
-    colIndex: Number
+    colIndex: Number,
+    nextPlayer: String
   },
   data() {
     return {
@@ -19,13 +20,12 @@ export default {
   },
   methods: {
     handleSquareClick: function() {
-      const symbol = "O";
       this.$emit("detectSquareUpdate", {
         row: this.rowIndex,
         col: this.colIndex,
-        content: symbol
+        content: this.nextPlayer
       });
-      this.content = symbol;
+      this.content = this.nextPlayer;
     }
   }
 };

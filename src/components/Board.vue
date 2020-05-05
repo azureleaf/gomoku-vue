@@ -6,6 +6,7 @@
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
+        :nextPlayer="nextPlayer"
         @detectSquareUpdate="updateBoardStatus($event)"
       >
       </Square>
@@ -27,13 +28,16 @@ export default {
   },
   data() {
     return {
-      boardStatus: []
+      boardStatus: [],
+      history: [],
+      nextPlayer: "O"
     };
   },
   methods: {
     updateBoardStatus(pos) {
       this.boardStatus[pos.row][pos.col] = pos.content;
       console.log(this.boardStatus);
+      this.nextPlayer = this.nextPlayer == "O" ? "X" : "O";
     }
   },
   mounted() {
