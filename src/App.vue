@@ -19,8 +19,8 @@ export default {
   data: function() {
     return {
       title: "Gomoku",
-      boardHeight: 20,
-      boardWidth: 20
+      boardHeight: 10,
+      boardWidth: 10
     };
   },
   mounted: function() {

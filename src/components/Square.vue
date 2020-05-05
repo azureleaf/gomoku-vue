@@ -14,18 +14,32 @@ export default {
   },
   data() {
     return {
-      content: " ",
+      content: "",
       squareStyle: "color: red;"
     };
   },
+  // computed: {
+  //   squareStyle() {}
+  // },
   methods: {
     handleSquareClick: function() {
-      this.$emit("detectSquareUpdate", {
-        row: this.rowIndex,
-        col: this.colIndex,
-        content: this.nextPlayer
-      });
-      this.content = this.nextPlayer;
+      // Update only when the square is empty
+      if (
+        this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0
+      ) {
+        // Update UI
+        this.content = this.$store.state.isOsTurn ? "O" : "X";
+
+        // Update state board
+        this.$store.commit("updateStatus", {
+          row: this.rowIndex,
+          col: this.colIndex,
+          symbol: this.content
+        });
+
+        // Update player in turn
+        this.$store.commit("updateTurn");
+      }
     }
   }
 };

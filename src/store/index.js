@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     boardStatus: [],
     boardSize: {
-      height: 20,
+      height: 10,
       width: 10
     },
     isOsTurn: true
@@ -18,11 +18,14 @@ export default new Vuex.Store({
         state.boardStatus.push(Array(state.boardSize.width).fill(""));
       console.log(state.boardStatus);
     },
-    updateStatus(state, row, col, symbol) {
-      state.boardStatus[row][col] = symbol;
+    updateStatus(state, payload) {
+      state.boardStatus[payload.row][payload.col] = payload.symbol;
     },
-    updateBoardSize(state, height, width) {
-      [state.boardSize.height, state.boardSize.width] = [height, width];
+    updateBoardSize(state, payload) {
+      [state.boardSize.height, state.boardSize.width] = [
+        payload.height,
+        payload.width
+      ];
     },
     updateTurn(state) {
       state.isOsTurn = state.isOsTurn == true ? false : true;
