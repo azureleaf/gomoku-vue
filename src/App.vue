@@ -22,6 +22,9 @@ export default {
       boardHeight: 20,
       boardWidth: 20
     };
+  },
+  mounted: function() {
+    this.$store.commit("initBoard");
   }
 };
 </script>
