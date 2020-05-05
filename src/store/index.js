@@ -16,7 +16,6 @@ export default new Vuex.Store({
     initBoard(state) {
       for (let i = 0; i < state.boardSize.height; i++)
         state.boardStatus.push(Array(state.boardSize.width).fill(""));
-      console.log(state.boardStatus);
     },
     updateStatus(state, payload) {
       state.boardStatus[payload.row][payload.col] = payload.symbol;

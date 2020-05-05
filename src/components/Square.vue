@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     squareStyle() {
-      return this.$store.state.isOsTurn ? "color: red;" : "color: green;";
+      return this.content == "O" ? "color: red;" : "color: green;";
     }
   },
   methods: {
