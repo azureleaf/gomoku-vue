@@ -10,7 +10,8 @@ export default new Vuex.Store({
       height: 10,
       width: 10
     },
-    isOsTurn: true
+    isOsTurn: true,
+    history: []
   },
   mutations: {
     initBoard(state) {
@@ -19,6 +20,11 @@ export default new Vuex.Store({
     },
     updateStatus(state, payload) {
       state.boardStatus[payload.row][payload.col] = payload.symbol;
+      state.history.push({
+        row: payload.row,
+        col: payload.col,
+        symbol: payload.symbol
+      });
     },
     updateBoardSize(state, payload) {
       [state.boardSize.height, state.boardSize.width] = [

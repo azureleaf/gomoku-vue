@@ -1,18 +1,25 @@
 <template>
   <div class="panel">
-    <p>？手目です</p>
-    <p>？の番です</p>
+    <p>{{ turns }}手目です</p>
+    <p>{{ activePlayer }}の番です</p>
   </div>
 </template>
 <script>
 export default {
   name: "Panel",
-  props: {
-    boardHeight: Number,
-    boardWidth: Number
-  },
-  data() {
-    return {};
+  // data() {
+  //   return {
+  //     turns: this.$store.state.history.length,
+  //     activePlayer: this.$store.state.isOsTurn ? "O" : "X"
+  //   };
+  // }
+  computed: {
+    turns: function() {
+      return this.$store.state.history.length + 1;
+    },
+    activePlayer: function() {
+      return this.$store.state.isOsTurn ? "O" : "X";
+    }
   }
 };
 </script>
