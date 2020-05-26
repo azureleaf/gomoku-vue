@@ -22,7 +22,7 @@ export default {
     let cross2 = document.getElementById("cross2-" + this.pos);
     cross2.setAttribute(
       "d",
-      `M ${padding},${padding + 2 * r} L ${r * 2 + padding},${padding} `
+      `M ${padding + 2 * r},${padding} L ${padding},${padding + 2 * r} `
     );
     [cross1, cross2].forEach(stroke => {
       stroke.setAttribute("stroke", "blue");

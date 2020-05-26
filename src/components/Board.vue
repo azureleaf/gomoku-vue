@@ -35,5 +35,5 @@ div.board
   display inline-block
   margin 0
   padding 0
-  border solid 2px lightslategray
+  border solid 2px #00cccc
 </style>

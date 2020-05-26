@@ -62,5 +62,5 @@ span.square
   font-weight bold
   text-align center
   vertical-align middle
-  border solid 1px lightslategray
+  border solid 1px #00cccc
 </style>
