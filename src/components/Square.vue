@@ -52,16 +52,15 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-span.square {
-  display: inline-block;
-  font-family: 'Noto Sans CJK JP', sans-serif;
-  height: 20px;
-  width: 20px;
-  padding: 5px;
-  margin: auto;
-  font-weight: bold;
-  text-align: center;
-  vertical-align: middle;
-  border: solid 1px deepskyblue;
-}
+span.square
+  display inline-block
+  font-family 'Noto Sans CJK JP', sans-serif
+  height 20px
+  width 20px
+  padding 5px
+  margin auto
+  font-weight bold
+  text-align center
+  vertical-align middle
+  border solid 1px lightslategray
 </style>

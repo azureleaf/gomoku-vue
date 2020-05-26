@@ -25,7 +25,7 @@ export default {
       `M ${padding},${padding + 2 * r} L ${r * 2 + padding},${padding} `
     );
     [cross1, cross2].forEach(stroke => {
-      stroke.setAttribute("stroke", "green");
+      stroke.setAttribute("stroke", "blue");
       stroke.setAttribute("stroke-width", 3);
     });
   }
