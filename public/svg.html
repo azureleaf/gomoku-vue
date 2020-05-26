@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #circle {
+        stroke-dasharray: 180;
+        animation: animateCircle 0.5s linear forwards;
+      }
+      #cross1 {
+        stroke-dasharray: 100;
+        animation: animateCross1 0.3s linear forwards;
+      }
+      #cross2 {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: animateCross2 0.3s linear forwards;
+        animation-delay: 0.3s;
+      }
+      @keyframes animateCircle {
+        from {
+          stroke-dashoffset: 180;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes animateCross1 {
+        from {
+          stroke-dashoffset: 100;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes animateCross2 {
+        from {
+          stroke-dashoffset: 100;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg height="300" width="300">
+      <g fill="none">
+        <path id="circle" stroke="blue" stroke-width="8" fill="none" />
+      </g>
+    </svg>
+    <svg height="300" width="300">
+      <g fill="none">
+        <path id="cross1" stroke="red" stroke-width="8" fill="none" />
+        <path id="cross2" stroke="red" stroke-width="8" fill="none" />
+      </g>
+    </svg>
+  
+    <script>
+      const r = 25;
+      const padding = 10;
+      document
+        .getElementById("circle")
+        .setAttribute(
+          "d",
+          `M ${r + padding},${padding} ` +
+            `A ${r},${r} 0 0 1 ${r + padding},${2 * r + padding} ` +
+            `A ${r},${r} 0 0 1 ${r + padding},${padding}`
+        );
+      document
+        .getElementById("cross1")
+        .setAttribute(
+          "d",
+          `M ${padding},${padding} L ${2 * r + padding},${r * 2 + padding} `
+        );
+      document
+        .getElementById("cross2")
+        .setAttribute(
+          "d",
+          `M ${padding},${padding + 2 * r} L ${r * 2 + padding},${padding} `
+        );
+    </script>
+  </body>
+</html>
