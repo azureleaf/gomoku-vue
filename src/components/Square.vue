@@ -1,8 +1,7 @@
 <template>
-  <span class="square" @click="handleSquareClick()" :style="squareStyle">
-    <!-- {{ content }} -->
-    <SymbolO v-if="hasO" :pos="rowIndex * 100 + colIndex"></SymbolO>
-    <SymbolX v-else-if="hasX" :pos="rowIndex * 100 + colIndex"></SymbolX>
+  <span class="square" @click="handleSquareClick()">
+    <SymbolO v-if="hasO" :pos="rowIndex + '-' + colIndex"></SymbolO>
+    <SymbolX v-else-if="hasX" :pos="rowIndex + '-' + colIndex"></SymbolX>
   </span>
 </template>
 
@@ -24,11 +23,6 @@ export default {
       hasX: false
     };
   },
-  computed: {
-    squareStyle() {
-      return this.content == "O" ? "color: red;" : "color: green;";
-    }
-  },
   methods: {
     handleSquareClick: function() {
       // Update only when the square is empty
@@ -46,7 +40,7 @@ export default {
         this.$store.commit("updateStatus", {
           row: this.rowIndex,
           col: this.colIndex,
-          symbol: this.content
+          symbol: this.$store.state.isOsTurn ? "O" : "X"
         });
 
         // Update player in turn
@@ -58,15 +52,16 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-span.square
-  display inline-block
-  font-family 'Noto Sans CJK JP', sans-serif
-  height 20px
-  width 20px
-  padding 5px
-  margin auto
-  font-weight bold
-  text-align center
-  vertical-align middle
-  border solid 1px deepskyblue
+span.square {
+  display: inline-block;
+  font-family: 'Noto Sans CJK JP', sans-serif;
+  height: 20px;
+  width: 20px;
+  padding: 5px;
+  margin: auto;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  border: solid 1px deepskyblue;
+}
 </style>
