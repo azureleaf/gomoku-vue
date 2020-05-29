@@ -14,56 +14,51 @@ export default {
   components: { SymbolO, SymbolX },
   props: {
     rowIndex: Number,
-    colIndex: Number
+    colIndex: Number,
   },
   data() {
     return {
       content: "",
       hasO: false,
-      hasX: false
+      hasX: false,
     };
   },
   methods: {
     handleSquareClick: function() {
-      // Update only when the square is empty
+      // Do nothing when the clicked square already has a symbol
       if (
         this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0
       ) {
-        // Update UI
-        // this.content = this.$store.state.isOsTurn ? "O" : "X";
-        if (this.$store.state.isOsTurn) this.hasO = true;
-        else {
-          this.hasX = true;
-        }
-
-        // Update state board
-        this.$store.commit("updateStatus", {
-          row: this.rowIndex,
-          col: this.colIndex,
-          symbol: this.$store.state.isOsTurn ? "O" : "X"
+        // Update the state
+        this.$store.commit("putStone", {
+          rowIndex: this.rowIndex,
+          colIndex: this.colIndex,
         });
 
-        // Update player in turn
-        this.$store.commit("updateTurn");
-
-        // Move the opponent
-        this.$store.commit("moveBrain");
+        // Update UI
+        if (this.$store.state.boardStatus[this.rowIndex][this.colIndex] == "O")
+          this.hasO = true;
+        else if (
+          this.$store.state.boardStatus[this.rowIndex][this.colIndex] == "X"
+        )
+          this.hasX = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped lang="stylus">
-span.square
-  display inline-block
-  font-family 'Noto Sans CJK JP', sans-serif
-  height 20px
-  width 20px
-  padding 5px
-  margin auto
-  font-weight bold
-  text-align center
-  vertical-align middle
-  border solid 1px #00cccc
+span.square {
+  display: inline-block;
+  font-family: 'Noto Sans CJK JP', sans-serif;
+  height: 20px;
+  width: 20px;
+  padding: 5px;
+  margin: auto;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  border: solid 1px #00cccc;
+}
 </style>

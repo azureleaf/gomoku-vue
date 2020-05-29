@@ -4,6 +4,7 @@ export default class Brain {
     this.boardSize = boardSize;
     this.chainLength = chainLength;
     this.history = history;
+    this.patterns = this.setPatterns();
   }
 
   setPatterns() {
@@ -17,16 +18,11 @@ export default class Brain {
       let patternArr = this.returnBinaryArray(i, this.chainLength);
       let scoreArr = this.returnScoreArray([...patternArr]);
 
-      // Put pattern with higher score (like [1,1,1,1,1]) first to reduce matching iteration
-      // Avoid to use Array.reverse(), they say it's way too slow
-      patterns[patterns.length - i - 1] = {
+      patterns[i] = {
         pattern: [...patternArr],
-        score: [...scoreArr]
-        // max: this.getMax(scoreArr),
+        score: [...scoreArr],
       };
     }
-
-    console.log(patterns);
 
     // Sort patterns to avoid unnecessary matching
     // e.g.
@@ -34,14 +30,32 @@ export default class Brain {
     // because they always matches in that case.
     // Therefore, put [11010] prior to [10000], [11000],
     // and when [11010] is matched, abort matching to latter patterns.
-    // return this.sortPatterns(patterns);
+    return this.sortPatterns(patterns);
+  }
+
+  /**
+   * Sort patterns
+   * Patterns with more "1" will be put first
+   * @param {Array.<Object>} patterns
+   * @return {Array.<Object>}
+   */
+  sortPatterns(patterns) {
+    return patterns.sort((a, b) => {
+      // Put the array with more "1" before others
+      return (
+        b.pattern.reduce((sum, num) => {
+          return sum + num;
+        }) -
+        a.pattern.reduce((sum, num) => {
+          return sum + num;
+        })
+      );
+    });
   }
 
   /**
    * Convert position array into score array based on patterns
-   * Each blank cell will have the same score
-   * In the future, this function will be unnecessary
-   *    Score should be updated by learning algorithm
+   * Every blank cell shares the same score
    *
    * @param {Array.<int>} array
    *  1: Position of the stones
@@ -96,5 +110,19 @@ export default class Brain {
       array[i] = Number(strBinary[i]);
     }
     return array;
+  }
+
+  /**
+   * Pick one empty square from the current board
+   */
+  getRandomMove() {
+    let emptySquares = [];
+    this.boardStatus.forEach((row, rowIndex) => {
+      row.forEach((col, colIndex) => {
+        if (col == "") emptySquares.push([rowIndex, colIndex]);
+      });
+    });
+    const randomIndex = Math.floor(Math.random() * emptySquares.length);
+    return emptySquares[randomIndex];
   }
 }

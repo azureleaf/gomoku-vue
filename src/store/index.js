@@ -10,20 +10,21 @@ export default new Vuex.Store({
     boardStatus: [],
     boardSize: {
       height: 10,
-      width: 10
+      width: 10,
     },
     // Board with scores for every square
     boardEvaluation: {
       // Scores for player O
       o: [],
       // Scores for player X
-      x: []
+      x: [],
     },
+    // Length of chains required to win the game
     chainLength: 5,
     isOsTurn: true,
     // Array of objects: row, col, symbol
     history: [],
-    brain: ""
+    brain: "",
   },
   mutations: {
     initBoard(state) {
@@ -43,28 +44,37 @@ export default new Vuex.Store({
 
       // Set matching templates
       state.brain.setPatterns();
-    },
-    updateStatus(state, payload) {
-      state.boardStatus[payload.row][payload.col] = payload.symbol;
-      state.history.push({
-        row: payload.row,
-        col: payload.col,
-        symbol: payload.symbol
-      });
+      console.debug("Patterns to be matched:", state.brain.patterns);
     },
     updateBoardSize(state, payload) {
       [state.boardSize.height, state.boardSize.width] = [
         payload.height,
-        payload.width
+        payload.width,
       ];
     },
-    updateTurn(state) {
-      state.isOsTurn = state.isOsTurn == true ? false : true;
-    },
     moveBrain(state) {
-      console.log("called");
-    }
+      const [row, col] = state.brain.getRandomMove();
+      console.log(row, col);
+    },
+    putStone(state, payload) {
+      // Update only when the square is empty
+      if (state.boardStatus[payload.rowIndex][payload.colIndex].length == 0) {
+        // Update state board
+        const symbol = state.isOsTurn ? "O" : "X";
+
+        state.boardStatus[payload.rowIndex][payload.colIndex] = symbol;
+
+        state.history.push({
+          row: payload.rowIndex,
+          col: payload.colIndex,
+          symbol: symbol,
+        });
+
+        // Update player turn
+        state.isOsTurn = !state.isOsTurn;
+      }
+    },
   },
   actions: {},
-  modules: {}
+  modules: {},
 });
