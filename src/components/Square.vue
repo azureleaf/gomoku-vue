@@ -45,6 +45,9 @@ export default {
 
         // Update player in turn
         this.$store.commit("updateTurn");
+
+        // Move the opponent
+        this.$store.commit("moveBrain");
       }
     }
   }
