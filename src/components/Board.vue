@@ -6,8 +6,7 @@
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
-      >
-      </Square>
+      ></Square>
     </div>
   </div>
 </template>
@@ -31,9 +30,10 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-div.board
-  display inline-block
-  margin 0
-  padding 0
-  border solid 2px #00cccc
+div.board {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: solid 2px #00cccc;
+}
 </style>
