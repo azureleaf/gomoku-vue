@@ -15,13 +15,11 @@ export default {
   props: {
     rowIndex: Number,
     colIndex: Number,
+    hasO: Boolean,
+    hasX: Boolean,
   },
   data() {
-    return {
-      content: "",
-      hasO: false,
-      hasX: false,
-    };
+    return {};
   },
   methods: {
     handleSquareClick: function() {
@@ -29,19 +27,7 @@ export default {
       if (
         this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0
       ) {
-        // Update the state
-        this.$store.commit("putStone", {
-          rowIndex: this.rowIndex,
-          colIndex: this.colIndex,
-        });
-
-        // Update UI
-        if (this.$store.state.boardStatus[this.rowIndex][this.colIndex] == "O")
-          this.hasO = true;
-        else if (
-          this.$store.state.boardStatus[this.rowIndex][this.colIndex] == "X"
-        )
-          this.hasX = true;
+        this.$emit("isClicked", this.rowIndex, this.colIndex);
       }
     },
   },

@@ -6,6 +6,9 @@
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
+        @isClicked="handleSquareClick"
+        :hasO="boardBools[rowIndex - 1][colIndex - 1].hasO"
+        :hasX="boardBools[rowIndex - 1][colIndex - 1].hasX"
       ></Square>
     </div>
   </div>
@@ -17,15 +20,52 @@ import Square from "./Square";
 export default {
   name: "Board",
   components: {
-    Square
+    Square,
   },
   data() {
     return {
       boardHeight: this.$store.state.boardSize.height,
-      boardWidth: this.$store.state.boardSize.width
+      boardWidth: this.$store.state.boardSize.width,
+      boardBools: [], // tell if every square has O or X
     };
   },
-  methods: {}
+  methods: {
+    async handleSquareClick(rowIndex, colIndex) {
+      // Update board, history, and turn
+      await this.$store.commit("putStone", {
+        rowIndex: rowIndex,
+        colIndex: colIndex,
+      });
+      // Update boolean board, thereby update the UI with props down
+      await this.updateBoardBools(rowIndex, colIndex);
+
+      // Let the opponent move
+      // this.$store.dispatch("moveCom");
+    },
+    async updateBoardBools(rowIndex, colIndex) {
+      const boardStatus = await this.$store.state.boardStatus;
+      this.boardBools[rowIndex][colIndex].hasO =
+        boardStatus[rowIndex][colIndex] == "O";
+      this.boardBools[rowIndex][colIndex].hasX =
+        boardStatus[rowIndex][colIndex] == "X";
+    },
+  },
+  created: function() {
+    // Initialize the board for booleans
+    // This process can't be put in "mounted", because boardBools[] is required for <template>
+    for (let i = 0; i < this.boardHeight; i++) {
+      this.boardBools.push(
+        // Note that by .fill(Object) every Object will be the reference to each other
+        // So you need to use .map() to keep them independent
+        Array(this.boardWidth)
+          .fill()
+          .map(() => {
+            // at first all the squares are empty
+            return { hasO: false, hasX: false };
+          })
+      );
+    }
+  },
 };
 </script>
 
