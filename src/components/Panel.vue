@@ -7,20 +7,14 @@
 <script>
 export default {
   name: "Panel",
-  // data() {
-  //   return {
-  //     turns: this.$store.state.history.length,
-  //     activePlayer: this.$store.state.isOsTurn ? "O" : "X"
-  //   };
-  // }
   computed: {
     turns: function() {
       return this.$store.state.history.length + 1;
     },
     activePlayer: function() {
       return this.$store.state.isOsTurn ? "O" : "X";
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="stylus">

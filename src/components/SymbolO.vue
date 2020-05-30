@@ -27,7 +27,7 @@ export default {
           `A ${r},${r} 0 0 1 ${r + padding},${2 * r + padding} ` +
           `A ${r},${r} 0 0 1 ${r + padding},${padding}`
       );
-  }
+  },
 };
 </script>
 

@@ -14,16 +14,17 @@ export default {
   name: "App",
   components: {
     Board,
-    Panel
+    Panel,
   },
   data: function() {
     return {
-      title: "Gomoku"
+      title: "Gomoku",
     };
   },
   mounted: function() {
+    // Initialize the Vuex state
     this.$store.commit("initBoard");
-  }
+  },
 };
 </script>
 

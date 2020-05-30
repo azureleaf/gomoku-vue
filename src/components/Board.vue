@@ -36,16 +36,16 @@ export default {
         rowIndex: rowIndex,
         colIndex: colIndex,
       });
-      // Update boolean board, update UI with props down
+      // Update UI with props down (human player)
       await this.updateBoardBools(rowIndex, colIndex);
 
-      // Let the opponent move
+      // Let the COM player move
       // This just update the state, not UI
       this.$store.dispatch("moveCom");
 
-      // Update boolean board, update UI with props down
-      const nextMove = await this.$store.state.nextComMove;
-      await this.updateBoardBools(nextMove.rowIndex, nextMove.colIndex);
+      // Update UI with props down (com player)
+      const nextComMove = await this.$store.state.nextComMove;
+      this.updateBoardBools(nextComMove.rowIndex, nextComMove.colIndex);
     },
     async updateBoardBools(rowIndex, colIndex) {
       const boardStatus = await this.$store.state.boardStatus;
@@ -57,10 +57,11 @@ export default {
   },
   created: function() {
     // Initialize the board for booleans
-    // This process can't be put in "mounted", because boardBools[] is required for <template>
+    // This process can't be put in "mounted",
+    // because boardBools[] is required for <template> rendering
     for (let i = 0; i < this.boardHeight; i++) {
       this.boardBools.push(
-        // Note that by .fill(Object) every Object will be the reference to each other
+        // Note that by .fill(Object), every Object will be the reference to each other
         // So you need to use .map() to keep them independent
         Array(this.boardWidth)
           .fill()

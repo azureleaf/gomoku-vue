@@ -28,7 +28,7 @@ export default {
       stroke.setAttribute("stroke", "blue");
       stroke.setAttribute("stroke-width", 3);
     });
-  }
+  },
 };
 </script>
 
