@@ -1,5 +1,9 @@
 <template>
-  <span class="square" @click="handleSquareClick()">
+  <span
+    class="square"
+    @click="handleSquareClick()"
+    :class="{ bgColored: isLatestMove }"
+  >
     <SymbolO v-if="hasO" :pos="rowIndex + '-' + colIndex"></SymbolO>
     <SymbolX v-else-if="hasX" :pos="rowIndex + '-' + colIndex"></SymbolX>
   </span>
@@ -17,6 +21,7 @@ export default {
     colIndex: Number,
     hasO: Boolean,
     hasX: Boolean,
+    isLatestMove: Boolean,
   },
   data() {
     return {};
@@ -45,5 +50,9 @@ span.square {
   text-align: center;
   vertical-align: middle;
   border: solid 1px #00cccc;
+}
+
+.bgColored {
+  background-color: #ffff99;
 }
 </style>
