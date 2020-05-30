@@ -4,8 +4,8 @@
       <path
         :id="'circle' + pos"
         class="circle"
-        stroke="red"
-        stroke-width="3"
+        stroke="#F4511E"
+        stroke-width="4"
         fill="none"
       />
     </g>
@@ -17,8 +17,8 @@ export default {
   name: "SymbolO",
   props: ["pos"],
   mounted: function() {
-    const r = 8;
-    const padding = 2;
+    const r = 7;
+    const padding = 3;
     document
       .getElementById("circle" + this.pos)
       .setAttribute(

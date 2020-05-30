@@ -72,4 +72,5 @@ export default {
   font-family: 'Fredoka One', cursive !important
 .disableCapsLock
   text-transform: none
+  letter-spacing: 0
 </style>

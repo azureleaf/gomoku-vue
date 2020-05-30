@@ -12,8 +12,8 @@ export default {
   name: "SymbolO",
   props: ["pos"],
   mounted: function() {
-    const r = 8;
-    const padding = 2;
+    const r = 7;
+    const padding = 3;
     let cross1 = document.getElementById("cross1-" + this.pos);
     cross1.setAttribute(
       "d",
@@ -26,7 +26,7 @@ export default {
     );
     [cross1, cross2].forEach(stroke => {
       stroke.setAttribute("stroke", "blue");
-      stroke.setAttribute("stroke-width", 3);
+      stroke.setAttribute("stroke-width", 4);
     });
   },
 };
