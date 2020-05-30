@@ -1,12 +1,42 @@
 <template>
-  <div class="panel">
-    <p>{{ turns }}手目です</p>
-    <p>{{ activePlayer }}の番です</p>
-  </div>
+  <v-container class="setFont">
+    <p>
+      Moves:
+      <span class="largeText ml-1">{{ turns }}</span>
+    </p>
+    <p>
+      Turn:
+      <span class="largeText ml-1">{{ activePlayer }}</span>
+    </p>
+    <v-btn class="disableCapsLock ma-1" depressed :color="uniColor" dark>
+      <v-icon class="mr-1">mdi-arrow-left-drop-circle</v-icon>One Move Back
+    </v-btn>
+    <v-btn class="disableCapsLock ma-1" depressed :color="uniColor" dark>
+      <v-icon class="mr-1">mdi-reload</v-icon>Resume
+    </v-btn>
+    <p>Board Size</p>
+    <v-slider
+      class="mt-5 pt-5"
+      v-model="boardSize"
+      step="1"
+      :max="20"
+      :min="3"
+      thumb-label="always"
+      :color="uniColor"
+      :track-color="uniColor"
+      :thumb-color="uniColor"
+    ></v-slider>
+  </v-container>
 </template>
 <script>
 export default {
   name: "Panel",
+  data: function() {
+    return {
+      boardSize: 10,
+      uniColor: "deep-orange",
+    };
+  },
   computed: {
     turns: function() {
       return this.$store.state.history.length + 1;
@@ -18,9 +48,7 @@ export default {
 };
 </script>
 <style scoped lang="stylus">
-div.board
-  display inline-block
-  margin 0
-  padding 0
-  border solid 2px deepskyblue
+.largeText {
+  font-size: 1.4em;
+}
 </style>

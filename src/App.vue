@@ -3,7 +3,7 @@
     <v-app-bar app color="deep-orange" dark dense>
       <div class="d-flex align-center">
         <v-icon x-large class="mr-1">mdi-blur</v-icon>
-        <v-toolbar-title class="title-font">
+        <v-toolbar-title class="setFont">
           {{ title }}
         </v-toolbar-title>
       </div>
@@ -13,7 +13,7 @@
         target="_blank"
         text
       >
-        <span class="mr-2">GitHub</span>
+        <span class="mr-2 setFont disableCapsLock">GitHub</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
@@ -63,10 +63,13 @@ export default {
 </script>
 
 <style lang="stylus">
-@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
 #main
   background-color: #00cccc;
 
-.title-font
-  font-family: 'Righteous', cursive
+.setFont
+  font-family: 'Fredoka One', cursive !important
+.disableCapsLock
+  text-transform: none
 </style>
