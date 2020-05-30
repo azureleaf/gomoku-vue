@@ -27,6 +27,7 @@ export default {
       if (
         this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0
       ) {
+        // Tell the parent component that this square is clicked
         this.$emit("isClicked", this.rowIndex, this.colIndex);
       }
     },

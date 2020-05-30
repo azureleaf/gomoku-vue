@@ -36,11 +36,16 @@ export default {
         rowIndex: rowIndex,
         colIndex: colIndex,
       });
-      // Update boolean board, thereby update the UI with props down
+      // Update boolean board, update UI with props down
       await this.updateBoardBools(rowIndex, colIndex);
 
       // Let the opponent move
-      // this.$store.dispatch("moveCom");
+      // This just update the state, not UI
+      this.$store.dispatch("moveCom");
+
+      // Update boolean board, update UI with props down
+      const nextMove = await this.$store.state.nextComMove;
+      await this.updateBoardBools(nextMove.rowIndex, nextMove.colIndex);
     },
     async updateBoardBools(rowIndex, colIndex) {
       const boardStatus = await this.$store.state.boardStatus;

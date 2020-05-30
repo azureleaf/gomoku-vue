@@ -25,7 +25,13 @@ export default new Vuex.Store({
     // Array of objects: row, col, symbol
     history: [],
     brain: "",
+    nextComMove: "",
   },
+  // getters: {
+  //   getBoardStatus: state => {
+  //     return state.boardStatus;
+  //   },
+  // },
   mutations: {
     initBoard(state) {
       for (let i = 0; i < state.boardSize.height; i++) {
@@ -52,9 +58,8 @@ export default new Vuex.Store({
         payload.width,
       ];
     },
-    moveBrain(state) {
-      const [row, col] = state.brain.getRandomMove();
-      console.log(row, col);
+    getNextComMove(state) {
+      state.nextComMove = state.brain.getRandomMove();
     },
     putStone(state, payload) {
       // Update only when the square is empty
@@ -75,6 +80,11 @@ export default new Vuex.Store({
       }
     },
   },
-  actions: {},
+  actions: {
+    moveCom({ commit, state }) {
+      commit("getNextComMove");
+      commit("putStone", state.nextComMove);
+    },
+  },
   modules: {},
 });

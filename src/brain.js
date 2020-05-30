@@ -116,10 +116,15 @@ export default class Brain {
    * Pick one empty square from the current board
    */
   getRandomMove() {
+    // List of coords of all the empty squares
     let emptySquares = [];
     this.boardStatus.forEach((row, rowIndex) => {
       row.forEach((col, colIndex) => {
-        if (col == "") emptySquares.push([rowIndex, colIndex]);
+        if (col == "")
+          emptySquares.push({
+            rowIndex: rowIndex,
+            colIndex: colIndex,
+          });
       });
     });
     const randomIndex = Math.floor(Math.random() * emptySquares.length);
