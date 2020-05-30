@@ -34,7 +34,7 @@ export default {
 <style scoped lang="stylus">
 .circle {
   stroke-dasharray: 180;
-  animation: animateCircle 0.5s linear forwards;
+  animation: animateCircle 0.8s linear forwards;
 }
 
 @keyframes animateCircle {

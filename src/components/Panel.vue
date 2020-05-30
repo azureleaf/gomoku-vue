@@ -26,6 +26,19 @@
       :track-color="uniColor"
       :thumb-color="uniColor"
     ></v-slider>
+    <p>Chain Length</p>
+
+    <v-slider
+      class="mt-5 pt-5"
+      v-model="chainLength"
+      step="1"
+      :max="10"
+      :min="3"
+      thumb-label="always"
+      :color="uniColor"
+      :track-color="uniColor"
+      :thumb-color="uniColor"
+    ></v-slider>
   </v-container>
 </template>
 <script>
@@ -34,6 +47,7 @@ export default {
   data: function() {
     return {
       boardSize: 10,
+      chainLength: 5,
       uniColor: "deep-orange",
     };
   },

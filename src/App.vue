@@ -3,9 +3,7 @@
     <v-app-bar app color="deep-orange" dark dense>
       <div class="d-flex align-center">
         <v-icon x-large class="mr-1">mdi-blur</v-icon>
-        <v-toolbar-title class="setFont">
-          {{ title }}
-        </v-toolbar-title>
+        <v-toolbar-title class="setFont">{{ title }}</v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
       <v-btn
@@ -22,9 +20,11 @@
       <v-container>
         <v-row justify="center">
           <v-col cols="12" md="7">
-            <v-card class="d-flex justify-center">
-              <v-card-text class="d-flex justify-center">
-                <Board></Board>
+            <v-card class="d-flex justify-center" height="100%">
+              <v-card-text class="d-flex justify-center align-center">
+                <div>
+                  <Board></Board>
+                </div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -65,12 +65,16 @@ export default {
 <style lang="stylus">
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 
-#main
+#main {
   background-color: #00cccc;
+}
 
-.setFont
-  font-family: 'Fredoka One', cursive !important
-.disableCapsLock
-  text-transform: none
-  letter-spacing: 0
+.setFont {
+  font-family: 'Fredoka One', cursive !important;
+}
+
+.disableCapsLock {
+  text-transform: none;
+  letter-spacing: 0;
+}
 </style>
