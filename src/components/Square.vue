@@ -38,12 +38,10 @@ export default {
 <style scoped lang="stylus">
 span.square {
   display: inline-block;
-  font-family: 'Noto Sans CJK JP', sans-serif;
-  height: 20px;
-  width: 20px;
+  height: 32px;
+  width: 32px;
   padding: 5px;
   margin: auto;
-  font-weight: bold;
   text-align: center;
   vertical-align: middle;
   border: solid 1px #00cccc;
