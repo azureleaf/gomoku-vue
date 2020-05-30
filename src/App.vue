@@ -1,25 +1,24 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark dense>
+    <v-app-bar app color="deep-orange" dark dense>
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-icon x-large class="mr-1">mdi-blur</v-icon>
+        <v-toolbar-title class="title-font">
+          {{ title }}
+        </v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
-      <v-btn href="https://github.com/azureleaf/gomoku-vue" target="_blank" text>
+      <v-btn
+        href="https://github.com/azureleaf/gomoku-vue"
+        target="_blank"
+        text
+      >
         <span class="mr-2">GitHub</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <v-content>
+    <v-content id="main">
       <v-container>
         <v-row justify="center">
           <v-col cols="12" md="7">
@@ -63,4 +62,11 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+#main
+  background-color: #00cccc;
+
+.title-font
+  font-family: 'Righteous', cursive
+</style>
