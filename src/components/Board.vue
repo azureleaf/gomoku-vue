@@ -96,5 +96,6 @@ div.board {
   margin: 0;
   padding: 0;
   border: solid 2px #00cccc;
+  border-radius: 4px;
 }
 </style>
