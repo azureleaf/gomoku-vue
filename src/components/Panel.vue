@@ -97,10 +97,10 @@
       :thumb-color="uniColor"
       ticks="always"
       tick-size="4"
-      @change="isSnackbarOpen = true"
+      @change="openSnackbar()"
     ></v-slider>
-    <v-snackbar v-model="isSnackbarOpen" :timeout="3000" color="grey darken-3">
-      Please reset the game to apply changes!
+    <v-snackbar v-model="isSnackbarOpen" :timeout="10000" color="grey darken-3">
+      To apply changes, please reset the game!
       <v-btn color="deep-orange" text @click="isSnackbarOpen = false">
         OK
       </v-btn>
@@ -119,6 +119,7 @@ export default {
       boardSizeLimit: { max: 20, min: 3 },
       isDialogOpen: false,
       isSnackbarOpen: false,
+      hasShownSnackbar: false,
     };
   },
   computed: {
@@ -154,6 +155,11 @@ export default {
       } else {
         this.chainLengthLimit.max = 7;
       }
+      this.openSnackbar();
+    },
+    openSnackbar() {
+      if (this.hasShownSnackbar) return;
+      this.hasShownSnackbar = true;
       this.isSnackbarOpen = true;
     },
   },
