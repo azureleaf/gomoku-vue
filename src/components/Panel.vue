@@ -87,7 +87,6 @@
 
     <v-slider
       class="mt-5 pt-5"
-      :class="{ active: isChipOpen }"
       v-model="chainLength"
       step="1"
       :max="chainLengthLimit.max"
@@ -98,14 +97,14 @@
       :thumb-color="uniColor"
       ticks="always"
       tick-size="4"
+      @change="isSnackbarOpen = true"
     ></v-slider>
-    <p
-      class="inselectableText"
-      style="font-size: 0.9em;"
-      :class="isChipOpen ? 'deep-orange--text' : 'white--text'"
-    >
-      * Reset the game to apply changes!
-    </p>
+    <v-snackbar v-model="isSnackbarOpen" :timeout="3000" color="grey darken-3">
+      Please reset the game to apply changes!
+      <v-btn color="deep-orange" text @click="isSnackbarOpen = false">
+        OK
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 <script>
@@ -119,7 +118,7 @@ export default {
       chainLengthLimit: { max: 7, min: 3 },
       boardSizeLimit: { max: 20, min: 3 },
       isDialogOpen: false,
-      isChipOpen: false,
+      isSnackbarOpen: false,
     };
   },
   computed: {
@@ -155,7 +154,7 @@ export default {
       } else {
         this.chainLengthLimit.max = 7;
       }
-      this.isChipOpen = true;
+      this.isSnackbarOpen = true;
     },
   },
 };
@@ -173,5 +172,13 @@ export default {
 ::v-deep .v-slider__tick--filled, ::v-deep .v-slider__tick {
   background-color: #ff5722 !important;
   border-radius: 2px !important;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to { /* .fade-leave-active below version 2.1.8 */
+  opacity: 0;
 }
 </style>
