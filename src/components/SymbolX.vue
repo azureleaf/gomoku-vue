@@ -35,14 +35,14 @@ export default {
 <style scoped lang="stylus">
 .cross1 {
   stroke-dasharray: 100;
-  animation: animateCross1 0.4s linear forwards;
+  animation: animateCross1 0.5s linear forwards;
 }
 
 .cross2 {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  animation: animateCross2 0.4s linear forwards;
-  animation-delay: 0.3s;
+  animation: animateCross2 0.5s linear forwards;
+  animation-delay: 0.2s;
 }
 
 @keyframes animateCross1 {

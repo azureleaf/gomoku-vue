@@ -96,7 +96,7 @@
       :track-color="uniColor"
       :thumb-color="uniColor"
       ticks="always"
-      tick-size="4"
+      tick-size="5"
       @change="openSnackbar()"
     ></v-slider>
     <v-snackbar v-model="isSnackbarOpen" :timeout="10000" color="grey darken-3">
@@ -177,14 +177,6 @@ export default {
 // slider ticks: override the internal Vuetify class
 ::v-deep .v-slider__tick--filled, ::v-deep .v-slider__tick {
   background-color: #ff5722 !important;
-  border-radius: 2px !important;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter, .fade-leave-to { /* .fade-leave-active below version 2.1.8 */
-  opacity: 0;
+  border-radius: 3px !important;
 }
 </style>
