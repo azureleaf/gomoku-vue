@@ -1,5 +1,37 @@
 <template>
   <v-container class="setFont">
+    <v-dialog v-model="isDialogOpen" max-width="300px">
+      <v-card class="setFont" color="deep-orange" dark>
+        <v-card-title class="justify-center">Reset the game?</v-card-title>
+        <v-card-text class="text-center">
+          New Board Size: {{ this.boardSize }}<br />New Chain Length:
+          {{ this.chainLength }}
+        </v-card-text>
+        <v-spacer></v-spacer>
+        <v-card-actions class="justify-center">
+          <v-btn
+            color="white"
+            text
+            @click="isDialogOpen = false"
+            outlined
+            class="mx-2"
+            style="border-width: 2px;"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="white"
+            text
+            @click="isDialogOpen = false"
+            outlined
+            class="mx-2"
+            style="border-width: 2px;"
+          >
+            Reset
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <p>
       Moves:
       <span class="largeText ml-1">{{ turns }}</span>
@@ -27,6 +59,7 @@
           :color="uniColor"
           block
           dark
+          @click="isDialogOpen = true"
         >
           <v-icon class="mr-1">mdi-reload</v-icon>Reset
         </v-btn>
@@ -62,6 +95,7 @@
       :thumb-color="uniColor"
       ticks="always"
       tick-size="4"
+      @change="isDialogOpen = true"
     ></v-slider>
   </v-container>
 </template>
@@ -75,6 +109,7 @@ export default {
       uniColor: "deep-orange",
       chainLengthLimit: { max: 7, min: 3 },
       boardSizeLimit: { max: 20, min: 3 },
+      isDialogOpen: false,
     };
   },
   computed: {
@@ -110,6 +145,7 @@ export default {
       } else {
         this.chainLengthLimit.max = 7;
       }
+      this.isDialogOpen = true;
     },
   },
 };
