@@ -1,9 +1,8 @@
 export default class Brain {
-  constructor(boardStatus, boardSize, chainLength, history) {
+  constructor(boardStatus, boardSize, chainLength) {
     this.boardStatus = boardStatus;
     this.boardSize = boardSize;
     this.chainLength = chainLength;
-    this.history = history;
     this.patterns = this.setPatterns();
   }
 

@@ -12,13 +12,6 @@ export default new Vuex.Store({
       height: 10,
       width: 10,
     },
-    // Board with scores for every square
-    boardEvaluation: {
-      // Scores for player O
-      o: [],
-      // Scores for player X
-      x: [],
-    },
     // Length of chains required to win the game
     chainLength: 5,
     isOsTurn: true,
@@ -36,16 +29,13 @@ export default new Vuex.Store({
     initBoard(state) {
       for (let i = 0; i < state.boardSize.height; i++) {
         state.boardStatus.push(Array(state.boardSize.width).fill(""));
-        state.boardEvaluation.o.push(Array(state.boardSize.width).fill(0));
-        state.boardEvaluation.x.push(Array(state.boardSize.width).fill(0));
       }
 
       // Instantiate the logic center of the opponent
       this.state.brain = new Brain(
         state.boardStatus,
         state.boardSize,
-        state.chainLength,
-        state.history
+        state.chainLength
       );
 
       // Set matching templates
