@@ -65,7 +65,9 @@
         </v-btn>
       </v-col>
     </v-row>
-    <p>Board Size</p>
+    <p>
+      Board Size
+    </p>
     <v-slider
       class="mt-5 pt-5"
       v-model="boardSize"
@@ -85,6 +87,7 @@
 
     <v-slider
       class="mt-5 pt-5"
+      :class="{ active: isChipOpen }"
       v-model="chainLength"
       step="1"
       :max="chainLengthLimit.max"
@@ -95,8 +98,14 @@
       :thumb-color="uniColor"
       ticks="always"
       tick-size="4"
-      @change="isDialogOpen = true"
     ></v-slider>
+    <p
+      class="inselectableText"
+      style="font-size: 0.9em;"
+      :class="isChipOpen ? 'deep-orange--text' : 'white--text'"
+    >
+      * Reset the game to apply changes!
+    </p>
   </v-container>
 </template>
 <script>
@@ -110,6 +119,7 @@ export default {
       chainLengthLimit: { max: 7, min: 3 },
       boardSizeLimit: { max: 20, min: 3 },
       isDialogOpen: false,
+      isChipOpen: false,
     };
   },
   computed: {
@@ -145,7 +155,7 @@ export default {
       } else {
         this.chainLengthLimit.max = 7;
       }
-      this.isDialogOpen = true;
+      this.isChipOpen = true;
     },
   },
 };
@@ -153,6 +163,10 @@ export default {
 <style scoped lang="stylus">
 .largeText {
   font-size: 1.4em;
+}
+
+.inselectableText {
+  user-select: none;
 }
 
 // slider ticks: override the internal Vuetify class
