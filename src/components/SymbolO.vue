@@ -1,11 +1,12 @@
 <template>
-  <svg height="20" width="20">
+  <svg :height="jsonData.svgHeight" :width="jsonData.svgWidth">
     <g fill="none">
       <path
         :id="'circle' + pos"
-        class="circle"
+        class="circleStyle"
+        :class="{ animationForward: !isReverse, animationBackward: isReverse }"
         stroke="#F4511E"
-        stroke-width="4"
+        :stroke-width="jsonData.svgStrokeWidth"
         fill="none"
       />
     </g>
@@ -13,12 +14,21 @@
 </template>
 
 <script>
+import json from "./svgParams.json";
+
 export default {
   name: "SymbolO",
-  props: ["pos"],
+  props: ["pos", "isReverse"],
+  data: function() {
+    return {
+      jsonData: json,
+    };
+  },
   mounted: function() {
-    const r = 7;
-    const padding = 3;
+    // Both are valid in <script>: json.svgPadding / this.jsonData.svgPadding
+    // However, "json.svgPadding" notation can't be used inside <template>
+    const r = json.svgCircleRadius;
+    const padding = json.svgPadding;
     document
       .getElementById("circle" + this.pos)
       .setAttribute(
@@ -32,15 +42,28 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.circle {
-  stroke-dasharray: 180;
-  animation: animateCircle 1s linear forwards;
+json('svgParams.json');
+
+.circleStyle {
+  stroke-dasharray: 2 * PI * svgCircleRadius;
+  animation: animateCircle linear forwards;
+}
+
+.animationForward {
+  animation-direction: normal;
+  animation-duration: circleAnimationDuration;
+}
+
+.animationBackward {
+  animation-direction: reverse;
+  animation-duration: circleAnimationDuration;
 }
 
 @keyframes animateCircle {
   from {
-    stroke-dashoffset: 180;
+    stroke-dashoffset: 2 * PI * svgCircleRadius;
   }
+
   to {
     stroke-dashoffset: 0;
   }

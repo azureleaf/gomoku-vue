@@ -1,0 +1,11 @@
+{
+  "svgHeight": 20,
+  "svgWidth": 20,
+  "svgCircleRadius": 7,
+  "svgCrossBoxLength": 7,
+  "svgPadding": 3,
+  "svgStrokeWidth": 4,
+  "crossAnimationDuration": "0.2s",
+  "crossDelay": "0.3s",
+  "circleAnimationDuration": "0.4s"
+}

@@ -4,8 +4,16 @@
     @click="handleSquareClick()"
     :class="{ bgColored: isLatestMove }"
   >
-    <SymbolO v-if="hasO" :pos="rowIndex + '-' + colIndex"></SymbolO>
-    <SymbolX v-else-if="hasX" :pos="rowIndex + '-' + colIndex"></SymbolX>
+    <SymbolO
+      v-if="hasO"
+      :isReverse="isReverse"
+      :pos="rowIndex + '-' + colIndex"
+    ></SymbolO>
+    <SymbolX
+      v-else-if="hasX"
+      :isReverse="isReverse"
+      :pos="rowIndex + '-' + colIndex"
+    ></SymbolX>
   </span>
 </template>
 
@@ -24,7 +32,9 @@ export default {
     isLatestMove: Boolean,
   },
   data() {
-    return {};
+    return {
+      isReverse: false,
+    };
   },
   methods: {
     handleSquareClick: function() {

@@ -1,19 +1,36 @@
 <template>
-  <svg height="20" width="20">
+  <svg :height="jsonData.svgHeight" :width="jsonData.svgWidth">
     <g fill="none">
-      <path :id="'cross1-' + pos" class="cross1" fill="none" />
-      <path :id="'cross2-' + pos" class="cross2" fill="none" />
+      <path
+        :id="'cross1-' + pos"
+        class="cross1"
+        :class="{ cross1Forward: !isReverse, cross1Backward: isReverse }"
+        fill="none"
+      />
+      <path
+        :id="'cross2-' + pos"
+        class="cross2"
+        :class="{ cross2Forward: !isReverse, cross2Backward: isReverse }"
+        fill="none"
+      />
     </g>
   </svg>
 </template>
 
 <script>
+import json from "./svgParams.json";
+
 export default {
-  name: "SymbolO",
-  props: ["pos"],
+  name: "SymbolX",
+  props: ["pos", "isReverse"],
+  data: function() {
+    return {
+      jsonData: json,
+    };
+  },
   mounted: function() {
-    const r = 7;
-    const padding = 3;
+    const r = json.svgCrossBoxLength;
+    const padding = json.svgPadding;
     let cross1 = document.getElementById("cross1-" + this.pos);
     cross1.setAttribute(
       "d",
@@ -26,28 +43,42 @@ export default {
     );
     [cross1, cross2].forEach(stroke => {
       stroke.setAttribute("stroke", "blue");
-      stroke.setAttribute("stroke-width", 4);
+      stroke.setAttribute("stroke-width", json.svgStrokeWidth);
     });
   },
 };
 </script>
 
 <style scoped lang="stylus">
-.cross1 {
-  stroke-dasharray: 100;
-  animation: animateCross1 0.5s linear forwards;
+json('svgParams.json');
+obliqueLength = 2 * svgCrossBoxLength * (2 ** 0.5);
+
+.cross1, .cross2 {
+  stroke-dasharray: obliqueLength;
 }
 
-.cross2 {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  animation: animateCross2 0.5s linear forwards;
-  animation-delay: 0.2s;
+.cross1Forward {
+  animation: animationForward crossAnimationDuration linear forwards;
 }
 
-@keyframes animateCross1 {
+.cross1Backward {
+  animation: animationBackward crossAnimationDuration linear forwards;
+  animation-delay: crossDelay;
+}
+
+.cross2Forward {
+  stroke-dashoffset: obliqueLength;
+  animation: animationForward crossAnimationDuration linear forwards;
+  animation-delay: crossDelay;
+}
+
+.cross2Backward {
+  animation: animationBackward crossAnimationDuration linear forwards;
+}
+
+@keyframes animationForward {
   from {
-    stroke-dashoffset: 100;
+    stroke-dashoffset: obliqueLength;
   }
 
   to {
@@ -55,13 +86,13 @@ export default {
   }
 }
 
-@keyframes animateCross2 {
+@keyframes animationBackward {
   from {
-    stroke-dashoffset: 100;
+    stroke-dashoffset: 0;
   }
 
   to {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: obliqueLength;
   }
 }
 </style>
