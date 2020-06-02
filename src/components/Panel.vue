@@ -79,7 +79,7 @@
       :track-color="uniColor"
       :thumb-color="uniColor"
       ticks="always"
-      tick-size="4"
+      tick-size="5"
       @change="updateChainLengthLimits()"
     ></v-slider>
 
@@ -115,7 +115,7 @@ export default {
       boardSize: 10,
       chainLength: 5,
       uniColor: "deep-orange",
-      chainLengthLimit: { max: 7, min: 3 },
+      chainLengthLimit: { max: 5, min: 3 },
       boardSizeLimit: { max: 20, min: 3 },
       isDialogOpen: false,
       isSnackbarOpen: false,
@@ -133,7 +133,7 @@ export default {
   methods: {
     // Keep the chain length equal to or shorter than the board length
     updateChainLengthLimits() {
-      if (this.boardSize < 7) {
+      if (this.boardSize < 5) {
         /**
          * When there's only one selectable value in v-slider,
          * such as "3" chain length in 3x3 board,
@@ -153,7 +153,7 @@ export default {
               this.chainLength = this.boardSize;
           });
       } else {
-        this.chainLengthLimit.max = 7;
+        this.chainLengthLimit.max = 5;
       }
       this.openSnackbar();
     },
@@ -177,6 +177,6 @@ export default {
 // slider ticks: override the internal Vuetify class
 ::v-deep .v-slider__tick--filled, ::v-deep .v-slider__tick {
   background-color: #ff5722 !important;
-  border-radius: 3px !important;
+  border-radius: 4px !important;
 }
 </style>
