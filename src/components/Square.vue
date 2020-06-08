@@ -37,7 +37,7 @@ export default {
     };
   },
   methods: {
-    handleSquareClick: function() {
+    handleSquareClick: function () {
       // Do nothing when the clicked square already has a symbol
       if (
         this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0

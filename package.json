@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "eslint-config-prettier": "^6.11.0",
     "vue": "^2.6.11",
     "vuetify": "^2.2.32",
     "vuex": "^3.4.0"
