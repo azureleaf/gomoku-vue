@@ -19,12 +19,12 @@ import json from "./svgParams.json";
 export default {
   name: "SymbolO",
   props: ["pos", "isReverse"],
-  data: function() {
+  data: function () {
     return {
       jsonData: json,
     };
   },
-  mounted: function() {
+  mounted: function () {
     // Both are valid in <script>: json.svgPadding / this.jsonData.svgPadding
     // However, "json.svgPadding" notation can't be used inside <template>
     const r = json.svgCircleRadius;

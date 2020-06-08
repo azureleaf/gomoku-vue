@@ -23,12 +23,12 @@ import json from "./svgParams.json";
 export default {
   name: "SymbolX",
   props: ["pos", "isReverse"],
-  data: function() {
+  data: function () {
     return {
       jsonData: json,
     };
   },
-  mounted: function() {
+  mounted: function () {
     const r = json.svgCrossBoxLength;
     const padding = json.svgPadding;
     let cross1 = document.getElementById("cross1-" + this.pos);
@@ -41,7 +41,7 @@ export default {
       "d",
       `M ${padding + 2 * r},${padding} L ${padding},${padding + 2 * r} `
     );
-    [cross1, cross2].forEach(stroke => {
+    [cross1, cross2].forEach((stroke) => {
       stroke.setAttribute("stroke", "blue");
       stroke.setAttribute("stroke-width", json.svgStrokeWidth);
     });
