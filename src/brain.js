@@ -112,7 +112,7 @@ export default class Brain {
   }
 
   /**
-   * Pick one empty square from the current board
+   * Pick one empty square from the current board randomly
    */
   getRandomMove() {
     // List of coords of all the empty squares
