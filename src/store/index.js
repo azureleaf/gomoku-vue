@@ -17,7 +17,7 @@ export default new Vuex.Store({
     isOsTurn: true,
     // Array of objects: row, col, symbol
     history: [],
-    brain: "",
+    brain: "", // place for the instance of COM player algorithm
     nextComMove: "",
   },
   // getters: {
@@ -49,7 +49,7 @@ export default new Vuex.Store({
       ];
     },
     getNextComMove(state) {
-      state.nextComMove = state.brain.getRandomMove();
+      state.nextComMove = state.brain.getRandomMove(state.boardStatus);
     },
     putStone(state, payload) {
       // Update only when the square is empty
