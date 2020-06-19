@@ -37,10 +37,6 @@ export default new Vuex.Store({
         state.boardSize,
         state.chainLength
       );
-
-      // Set matching templates
-      state.brain.setPatterns();
-      console.debug("Patterns to be matched:", state.brain.patterns);
     },
     updateBoardSize(state, payload) {
       [state.boardSize.height, state.boardSize.width] = [
