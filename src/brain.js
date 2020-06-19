@@ -3,32 +3,34 @@ export default class Brain {
     this.boardStatus = boardStatus;
     this.boardSize = boardSize;
     this.chainLength = chainLength;
-    this.patterns = this.setPatterns();
+    this.patterns = this.getPatterns();
   }
 
   /**
-   * Generate patterns to be used in the template matching later.
-   * Called from the constructor only.
+   * Generate patterns to be used in the template matching later. (for constructor)
    * e.g.
    *    When a player needs 3 stone chains to win,
    *    there're 2*2*2 = 8 pattern varieties
+   * @return {}
    */
-  setPatterns() {
+  getPatterns() {
     // Create empty container array
     let patterns = new Array(Math.pow(2, this.chainLength)).fill(null);
 
     for (let i = 0; i < patterns.length; i++) {
-      let patternArr = this.getBinaryArray(i, this.chainLength);
-      let scoreArr = this.getScoreArray([...patternArr]);
+      let binaryArr = this.getBinaryArray(i, this.chainLength);
+      let scoreArr = this.getScoreArray([...binaryArr]);
 
       patterns[i] = {
-        pattern: [...patternArr],
-        score: [...scoreArr],
+        binary: [...binaryArr], // e.g. [1, 1, 0, 1, 0]
+        score: [...scoreArr], // e.g. [0, 0, 100, 0, 100]
       };
     }
 
+    console.log("Template patterns:", patterns);
+
     /**
-     * Sort patterns to avoid unnecessary matching.
+     * Sort patterns to avoid unnecessary matching. (for constructor)
      * e.g.
      *   When [11010] matches, furtherly matching [10000], [11000] is redundant,
      *   because they always matches in that case.
@@ -48,10 +50,10 @@ export default class Brain {
     return patterns.sort((a, b) => {
       // Put the array with more "1" before others
       return (
-        b.pattern.reduce((sum, num) => {
+        b.binary.reduce((sum, num) => {
           return sum + num;
         }) -
-        a.pattern.reduce((sum, num) => {
+        a.binary.reduce((sum, num) => {
           return sum + num;
         })
       );
@@ -59,17 +61,17 @@ export default class Brain {
   }
 
   /**
-   * Convert position array into score array based on patterns
-   * Every blank cell shares the same score
+   * Convert position array into score array based on patterns. (for constructor)
+   * Every blank cell shares the same score.
    *
    * @param {Array.<number>} array
-   *  1: Position of the stones
-   *  0: Empty
+   *  1: square with a stone; not char symbol "O" nor "X"
+   *  0: Empty square
    * @return {Array.<number>}
    *
    * e.g.
    *  [1, 0, 0, 1, 0, 0] => [0, 100, 100, 0, 100, 100]
-   *  High score means recommended position to put stone in the next move
+   *  Position with higher score is more recommended position to put stone in the next move
    */
   getScoreArray(array) {
     let stoneCounter = 0;
@@ -81,13 +83,14 @@ export default class Brain {
     for (let i = 0; i < array.length; i++) {
       if (array[i] === 0) array[i] = Math.pow(10, stoneCounter);
       else if (array[i] === 1) array[i] = 0;
-      else console.log("Error: unknown symbol in the pattern: ", array[i]);
+      else console.error("Error: unknown symbol in the pattern: ", array[i]);
     }
     return array;
   }
 
   /**
-   * Convert a decimal number into binary array.
+   * Convert a decimal number into binary array. (for constructor)
+   * Unused upper digit will be filled with 0.
    *
    * @param {number} decimal
    *    Decimal number to be converted to binary number
@@ -95,31 +98,28 @@ export default class Brain {
    *    Length of the array to be returned
    * @return {Array.<number>}
    *    Array of the binary number with blank digits filled with 0
-   *
-   * Unused upper digit will be filled with 0.
-   *    e.g.
-   *      5 => 101 => [0, 0, 1, 0, 1]
    */
   getBinaryArray(decimal, arrayLength) {
+    // e.g. 5 => "101"
     var strBinary = decimal.toString(2);
 
     // Fill zero to the blank digit
-    for (let i = 0; i < arrayLength - strBinary.length; i++) {
+    // e.g. "101" => "00101"
+    while (strBinary.length < arrayLength) {
       strBinary = "0" + strBinary;
     }
 
-    // Define temporary array to return
-    var array = new Array(arrayLength).fill(0);
-    for (let i = 0; i < arrayLength; i++) {
-      array[i] = Number(strBinary[i]);
-    }
-    return array;
+    // Convert string of number to array of numbers splitted
+    // e.g. "00101" => [0, 0, 1, 0, 1]
+    return strBinary.split("").map((num) => Number(num));
   }
 
   /**
    * Pick one empty square from the current board randomly (for debug)
-   * @param {Array.<Array.<"O"|"X"|"">>} boardStatus Represents for current board
-   * @return {{ rowIndex: number, colIndex: number}} Next COM move
+   * @param {Array.<Array.<"O"|"X"|"">>} boardStatus
+   *    Represents for current board
+   * @return {{ rowIndex: number, colIndex: number}}
+   *    Next COM move
    */
   getRandomMove(boardStatus) {
     // List of coords of all the empty squares
@@ -133,6 +133,8 @@ export default class Brain {
           });
       });
     });
+
+    // Pick an empty square from the empty squares
     const randomIndex = Math.floor(Math.random() * emptySquares.length);
     return emptySquares[randomIndex];
   }
@@ -148,62 +150,18 @@ export default class Brain {
   }
 
   /**
-   * Get the current board, return the score board for the specified player
+   * Return the score board for the specified player based on the current board.
+   *
    * @param {Array.<Array.<"O"|"X"|"">>} boardMatrix
    *    Represents for the current board
    * @param {boolean} isOsTurn
-   *    Tells for which player the score should be calculated
+   *    Declare for which player the score should be calculated
    * @return {Array.<Array.<number>>}
    *    Score for the player specified as a param ???
    */
   getScoreMatrix(boardMatrix, isOsTurn) {
-    // Origins & Directions of all the scans
-    let scanOrigins = [];
-
-    // Origins: from index 0
-    for (let i = 0; i < this.boardSize; i++) {
-      // From the leftmost column
-      scanOrigins.push({
-        row: i,
-        col: 0,
-        direction: "R",
-      });
-      scanOrigins.push({
-        row: i,
-        col: 0,
-        direction: "DR",
-      });
-      scanOrigins.push({
-        row: i,
-        col: 0,
-        direction: "UR",
-      });
-
-      // From the top row
-      scanOrigins.push({
-        row: 0,
-        col: i,
-        direction: "D",
-      });
-    }
-
-    // Origins: from index 1,
-    // because the origins for some diagonal lines are already included in the part above
-    for (let i = 1; i < this.boardSize; i++) {
-      // From the top column
-      scanOrigins.push({
-        row: 0,
-        col: i,
-        direction: "DR",
-      });
-
-      // From the bottom colum,n
-      scanOrigins.push({
-        row: this.boardSize - 1,
-        col: i,
-        direction: "UR",
-      });
-    }
+    // Get the origins & directions of all the lines to be scanned
+    const scanOrigins = this.getScanOrigins();
 
     // Each element in this array reprensents for
     // a score array for the scanned single line
@@ -223,8 +181,8 @@ export default class Brain {
       );
     }, []);
 
-    // The board which tells the score of every square
-    // Iinitialize with zero-filling
+    // The board which tells the score of every square.
+    // Initialize with zero-filling
     let scoreMatrix = boardMatrix.map((row) => {
       return row.map(() => 0);
     });
@@ -235,6 +193,66 @@ export default class Brain {
     }
 
     return scoreMatrix;
+  }
+
+  /**
+   * Return origins & directions of all the scans to be done later
+   *
+   * @returns {Array.<{row: number, col: number, direction: string}>}
+   *    e.g.
+   *      {row: 3, col: 0, direction: "R"} means
+   *      "Scan from (0, 3) square to the right"
+   */
+  getScanOrigins() {
+    // Container for the start points of the scans
+    let scanOrigins = [];
+
+    // Origins: from index 0
+    for (let i = 0; i < this.boardSize; i++) {
+      // From the leftmost column
+      scanOrigins.push({
+        row: i,
+        col: 0,
+        direction: "right",
+      });
+      scanOrigins.push({
+        row: i,
+        col: 0,
+        direction: "lowerRight",
+      });
+      scanOrigins.push({
+        row: i,
+        col: 0,
+        direction: "upperRight",
+      });
+
+      // From the top row
+      scanOrigins.push({
+        row: 0,
+        col: i,
+        direction: "down",
+      });
+    }
+
+    // Origins: from index 1,
+    // because the origins for some diagonal lines are already included in the part above
+    for (let i = 1; i < this.boardSize; i++) {
+      // From the top column to the lower right
+      scanOrigins.push({
+        row: 0,
+        col: i,
+        direction: "lowerRight",
+      });
+
+      // From the bottom column to the upper right
+      scanOrigins.push({
+        row: this.boardSize - 1,
+        col: i,
+        direction: "upperRight",
+      });
+    }
+
+    return scanOrigins;
   }
 
   /**
@@ -253,7 +271,6 @@ export default class Brain {
    *      output: [0, 100, 1000, 2100, 0, 0, 1000]
    */
   matchPattern(singleLine, patterns, symbol) {
-
     let scoreObj = [];
 
     // When input array is shorter than template patterns,
@@ -310,8 +327,9 @@ export default class Brain {
             for (let i = 0; i < scoreObj.length; i++) {
               // If that cell is blank, set score
               if (this.patterns[patIndex].pattern[i] === 0)
-                scoreObj[cursorObj + i].score += \
-                  this.patterns[patIndex].score[i];
+                scoreObj[cursorObj + i].score += this.patterns[patIndex].score[
+                  i
+                ];
             }
           }
         }
@@ -319,5 +337,85 @@ export default class Brain {
     }
 
     return scoreObj;
+  }
+
+  /**
+   * Scan a line in the board
+   * from the designated point
+   * toward the designated direction
+   * until cursor reaches the edge of the board,
+   * then return all the values in the line
+   *
+   * @param {Array.<Array.<string|null>>} matrix
+   *  2D matrix of the game board with "O", "X", or "null"
+   * @param {{row: number, col: number}} origin
+   *  Position of the starting square of the each scan.
+   *  {row: int, col: int}
+   * @param {string} direction
+   *  Direction of the scan.
+   *  Either of "right", "down", "lowerRight", "upperRight"
+   * @return {Array.<{row: number, col: number, value: <string|null>}>}
+   *  Line extracted with coordinates info
+   */
+  scanLine(matrix, origin, direction) {
+    var cursor = {
+      row: origin.row,
+      col: origin.col,
+    };
+
+    // Position and content of each square (O, X, or null)
+    //  is going to be pushed to this array one by one
+    var lineScanned = [];
+
+    // Acquire the square content in the line one by one
+    // until the cursor reaches the edge
+    let hasReachedEdge = false;
+    while (!hasReachedEdge) {
+      // Acquire the square content
+      lineScanned.push({
+        row: cursor.row,
+        col: cursor.col,
+        value: matrix[cursor.row][cursor.col],
+      });
+
+      switch (direction) {
+        case "right":
+          if (cursor.col === this.boardSize - 1) hasReachedEdge = true;
+          else cursor.col++;
+          break;
+
+        case "down":
+          if (cursor.row === this.boardSize - 1) hasReachedEdge = true;
+          else cursor.row++;
+          break;
+
+        case "lowerRight":
+          if (
+            cursor.row === this.boardSize - 1 ||
+            cursor.col === this.boardSize - 1
+          )
+            hasReachedEdge = true;
+          else {
+            cursor.row++;
+            cursor.col++;
+          }
+          break;
+
+        case "upperRight":
+          if (cursor.row === 0 || cursor.col === this.boardSize - 1)
+            hasReachedEdge = true;
+          else {
+            cursor.row--;
+            cursor.col++;
+          }
+          break;
+
+        default:
+          console.error("Error: unknown direction: ", direction);
+          return null;
+      }
+    }
+
+    return lineScanned;
   }
 }
