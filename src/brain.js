@@ -274,14 +274,14 @@ export default class Brain {
     let scoreObj = [];
 
     // When input array is shorter than template patterns,
-    //   no pattern will be matched, therefore abort the process
+    // no pattern will be matched, therefore abort
     if (singleLine.length < this.chainLength) return scoreObj;
 
     // Convert array format to the one which is compatible with pattern array
-    // e.g. Given that values in singleLine are like ["X", "X", null, "O"],
+    // e.g.
+    //    Given that values in singleLine are like    ["X", "X", null, "O"],
     //    When "symbol" is "X", this array turns into [   1,    1, 0, null]
     //    When "symbol" is "O", this array turns into [null, null, 0,    1]
-
     for (let i = 0; i < singleLine.length; i++) {
       // Convert format
       switch (singleLine[i].value) {
@@ -312,13 +312,13 @@ export default class Brain {
       cursorObj++
     ) {
       // Try to match every pattern to the array
-      for (let patIndex = 0; patIndex < this.patterns.length; patIndex++) {
+      for (let patIndex = 0; patIndex < patterns.length; patIndex++) {
         // Try to match every position in a pattern
         for (let cursorPat = 0; cursorPat < this.chainLength; cursorPat++) {
           // If discrepancy is found, abort matching to the remainder, then go to next pattern
           if (
             singleLine[cursorObj + cursorPat].value !==
-            this.patterns[patIndex].pattern[cursorPat]
+            patterns[patIndex].binary[cursorPat]
           )
             break;
 
@@ -326,10 +326,8 @@ export default class Brain {
           if (cursorPat === this.chainLength - 1) {
             for (let i = 0; i < scoreObj.length; i++) {
               // If that cell is blank, set score
-              if (this.patterns[patIndex].pattern[i] === 0)
-                scoreObj[cursorObj + i].score += this.patterns[patIndex].score[
-                  i
-                ];
+              if (patterns[patIndex].binary[i] === 0)
+                scoreObj[cursorObj + i].score += patterns[patIndex].score[i];
             }
           }
         }
@@ -350,7 +348,6 @@ export default class Brain {
    *  2D matrix of the game board with "O", "X", or "null"
    * @param {{row: number, col: number}} origin
    *  Position of the starting square of the each scan.
-   *  {row: int, col: int}
    * @param {string} direction
    *  Direction of the scan.
    *  Either of "right", "down", "lowerRight", "upperRight"
@@ -363,8 +360,8 @@ export default class Brain {
       col: origin.col,
     };
 
-    // Position and content of each square (O, X, or null)
-    //  is going to be pushed to this array one by one
+    // Position and content of each square (O, X, null)
+    // is going to be pushed to this array one by one
     var lineScanned = [];
 
     // Acquire the square content in the line one by one
