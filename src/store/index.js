@@ -6,17 +6,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // Board with O & X symbols
-    boardStatus: [],
-    boardSize: {
-      height: 10,
-      width: 10,
-    },
-    // Length of chains required to win the game
-    chainLength: 5,
+    boardStatus: [], // board with O & X symbols
+    boardSize: 10, // assumption: board is square-shaped
+    chainLength: 5, // length of the stones necessary to win the game
     isOsTurn: true,
-    // Array of objects: row, col, symbol
-    history: [],
+    history: [], // {row: number, col: number, symbol: string}
     brain: "", // place for the instance of COM player algorithm
     nextComMove: "",
   },
@@ -27,8 +21,8 @@ export default new Vuex.Store({
   // },
   mutations: {
     initBoard(state) {
-      for (let i = 0; i < state.boardSize.height; i++) {
-        state.boardStatus.push(Array(state.boardSize.width).fill(""));
+      for (let i = 0; i < state.boardSize; i++) {
+        state.boardStatus.push(Array(state.boardSize).fill(""));
       }
 
       // Instantiate the logic center of the opponent
@@ -39,10 +33,7 @@ export default new Vuex.Store({
       );
     },
     updateBoardSize(state, payload) {
-      [state.boardSize.height, state.boardSize.width] = [
-        payload.height,
-        payload.width,
-      ];
+      state.boardSize = payload.boardSize;
     },
     getNextComMove(state) {
       state.nextComMove = state.brain.getRandomMove(state.boardStatus);

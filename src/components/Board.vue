@@ -25,8 +25,8 @@ export default {
   },
   data() {
     return {
-      boardHeight: this.$store.state.boardSize.height,
-      boardWidth: this.$store.state.boardSize.width,
+      boardHeight: this.$store.state.boardSize,
+      boardWidth: this.$store.state.boardSize,
       boardBools: [], // tell if every square has O or X
     };
   },
@@ -70,7 +70,7 @@ export default {
       }
     },
   },
-  created: function() {
+  created: function () {
     // Initialize the board for booleans
     // This process can't be put in "mounted",
     // because boardBools[] is required for <template> rendering
