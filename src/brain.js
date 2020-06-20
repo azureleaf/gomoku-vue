@@ -3,8 +3,8 @@ export default class Brain {
    * Set class props.
    *
    * @param {Array.<Array.<"O"|"X"|null>>} boardStatus Actual board data
-   * @param {Number} boardSize Board size
-   * @param {Number} chainLength Length of the stones necessary to win the game
+   * @param {number} boardSize Board size
+   * @param {number} chainLength Length of the stones necessary to win the game
    */
   constructor(boardStatus, boardSize, chainLength) {
     this.boardStatus = boardStatus;
@@ -208,6 +208,9 @@ export default class Brain {
 
     // Pick an empty square from the empty squares
     const randomIndex = Math.floor(Math.random() * emptySquares.length);
+
+    console.log("random move", emptySquares[randomIndex]);
+
     return emptySquares[randomIndex];
   }
 
@@ -219,6 +222,8 @@ export default class Brain {
    */
   getNextMove(boardMatrix, isOsTurn) {
     console.log("getNextMove() is called.:", boardMatrix, isOsTurn);
+
+    return this.getRandomMove();
   }
 
   /**
