@@ -110,7 +110,7 @@
 <script>
 export default {
   name: "Panel",
-  data: function() {
+  data: function () {
     return {
       boardSize: 10,
       chainLength: 5,
@@ -123,10 +123,10 @@ export default {
     };
   },
   computed: {
-    turns: function() {
+    turns: function () {
       return this.$store.state.history.length + 1;
     },
-    activePlayer: function() {
+    activePlayer: function () {
       return this.$store.state.isOsTurn ? "O" : "X";
     },
   },
