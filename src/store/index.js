@@ -12,13 +12,8 @@ export default new Vuex.Store({
     isOsTurn: true,
     history: [], // {row: number, col: number, symbol: string}
     brain: "", // place for the instance of COM player algorithm
-    nextComMove: "",
+    nextComMove: "", // {row: number, col: number}
   },
-  // getters: {
-  //   getBoardStatus: state => {
-  //     return state.boardStatus;
-  //   },
-  // },
   mutations: {
     initBoard(state) {
       for (let i = 0; i < state.boardSize; i++) {
@@ -36,6 +31,7 @@ export default new Vuex.Store({
       state.boardSize = payload.boardSize;
     },
     getNextComMove(state) {
+      // state.nextComMove = state.brain.getRandomMove(state.boardStatus);
       state.nextComMove = state.brain.getRandomMove(state.boardStatus);
     },
     putStone(state, payload) {

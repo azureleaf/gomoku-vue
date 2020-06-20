@@ -166,7 +166,8 @@ export default class Brain {
     }
 
     // Origins: from index 1 to the edge,
-    // because the origins for some diagonal lines are already included in the part above
+    // because the origins for some diagonal scan lines
+    // are already pushed by the code above
     for (let i = 1; i < this.boardSize; i++) {
       // From the top column to the lower right
       scanOrigins.push({
@@ -216,9 +217,12 @@ export default class Brain {
 
   /**
    * Entry function for all the next move calculations
-   * @param {Array.<Array.<"O"|"X"|"">>} boardStatus Represents for current board
-   * @param {boolean} isOsTurn Tells if the next player is "O"
-   * @return {{ rowIndex: number, colIndex: number}} Next COM move
+   * @param {Array.<Array.<"O"|"X"|"">>} boardStatus
+   *    Represents for current board
+   * @param {boolean} isOsTurn
+   *    Tells if the next player is "O"
+   * @return {{ rowIndex: number, colIndex: number}}
+   *    Next COM move
    */
   getNextMove(boardMatrix, isOsTurn) {
     console.log("getNextMove() is called.:", boardMatrix, isOsTurn);
