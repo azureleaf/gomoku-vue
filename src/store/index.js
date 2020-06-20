@@ -31,8 +31,7 @@ export default new Vuex.Store({
       state.boardSize = payload.boardSize;
     },
     getNextComMove(state) {
-      // state.nextComMove = state.brain.getRandomMove(state.boardStatus);
-      state.nextComMove = state.brain.getRandomMove(state.boardStatus);
+      state.nextComMove = state.brain.getNextMove(state.boardStatus);
     },
     putStone(state, payload) {
       // Update only when the square is empty

@@ -224,10 +224,10 @@ export default class Brain {
    * @return {{ rowIndex: number, colIndex: number}}
    *    Next COM move
    */
-  getNextMove(boardMatrix, isOsTurn) {
-    console.log("getNextMove() is called.:", boardMatrix, isOsTurn);
+  getNextMove(boardStatus, isOsTurn) {
+    console.log("getNextMove() is called.:", boardStatus, isOsTurn);
 
-    return this.getRandomMove();
+    return this.getRandomMove(boardStatus);
   }
 
   /**
