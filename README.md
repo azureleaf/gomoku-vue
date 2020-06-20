@@ -12,9 +12,8 @@
     - [Run your unit tests](#run-your-unit-tests)
     - [Lints and fixes files](#lints-and-fixes-files)
     - [Customize configuration](#customize-configuration)
-  - [Directory Structure](#directory-structure)
-    - [a](#a)
-  - [Functions in `brain.js`](#functions-in-brainjs)
+  - [File Hierarchy Trees](#file-hierarchy-trees)
+  - [Calling Relationships of `brain.js`](#calling-relationships-of-brainjs)
 
 
 ## Project setup
@@ -45,6 +44,34 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-## Directory Structure
+## File Hierarchy Trees
 
-## Functions in `brain.js`
+- `App.vue`
+  - `Board.vue`
+    - `Square.vue`
+      - `SymbolO.vue` : SVG animation.
+      - `SymbolX.vue` : SVG animation.
+      - `svgParams.json`: Params for SVG animations.
+  - `Panel.vue` : Control panel of the game UI.
+- `brain.js`
+  - Logic engine of the COM player.
+  - Called from the Vuex mutator.
+  - Get the current board, return the next move calculated.
+- `store/index.js`
+  - Hold the current board status which should be shared with Vue components.
+- `main.js`
+  - Entry point of the whole app.
+  - Register Vue files & plugins.
+
+## Calling Relationships of `brain.js`
+
+- `getPatterns()`: Generate matching template. Called by the constructor.
+  - `getScoreArray()` 
+  - `getBinaryArray()`
+  - `sortPatterns()`
+- `getNextMove()`
+  - `getScoreMatrix()` : Generate evaluated score for every square for both players.
+    - `getScanOrigins()` : Generate starting points & directions of the line scans.
+    - `matchPattern()` : Pattern match and return the square scores for the single line.
+      - `scanLine()` : Extract the lines from the board.
+- `getRandomMove()` : for debugging. Randomly find the empty square in the board.
