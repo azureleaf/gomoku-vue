@@ -181,13 +181,13 @@ export default class Brain {
       );
     }, []);
 
-    // The board which tells the score of every square.
+    // The board with evaluated score for every square.
     // Initialize with zero-filling
     let scoreMatrix = boardMatrix.map((row) => {
       return row.map(() => 0);
     });
 
-    // Add scanning results square by square
+    // Sum scanning results square by square
     for (let i = 0; i < lines.length; i++) {
       scoreMatrix[lines[i].row][lines[i].col] += lines[i].score;
     }
@@ -207,7 +207,7 @@ export default class Brain {
     // Container for the start points of the scans
     let scanOrigins = [];
 
-    // Origins: from index 0
+    // Origins: from index 0 to the edge
     for (let i = 0; i < this.boardSize; i++) {
       // From the leftmost column
       scanOrigins.push({
@@ -234,7 +234,7 @@ export default class Brain {
       });
     }
 
-    // Origins: from index 1,
+    // Origins: from index 1 to the edge,
     // because the origins for some diagonal lines are already included in the part above
     for (let i = 1; i < this.boardSize; i++) {
       // From the top column to the lower right
@@ -352,7 +352,7 @@ export default class Brain {
    *  Direction of the scan.
    *  Either of "right", "down", "lowerRight", "upperRight"
    * @return {Array.<{row: number, col: number, value: <string|null>}>}
-   *  Line extracted with coordinates info
+   *  Coordinates & values of the squares in the line
    */
   scanLine(matrix, origin, direction) {
     var cursor = {
@@ -360,8 +360,7 @@ export default class Brain {
       col: origin.col,
     };
 
-    // Position and content of each square (O, X, null)
-    // is going to be pushed to this array one by one
+    // Container of position & value of each square (O, X, null)
     var lineScanned = [];
 
     // Acquire the square content in the line one by one
@@ -377,16 +376,19 @@ export default class Brain {
 
       switch (direction) {
         case "right":
+          // When reached the right edge
           if (cursor.col === this.boardSize - 1) hasReachedEdge = true;
           else cursor.col++;
           break;
 
         case "down":
+          // When reached the bottom edge
           if (cursor.row === this.boardSize - 1) hasReachedEdge = true;
           else cursor.row++;
           break;
 
         case "lowerRight":
+          // When reached the bottom edge or right edge
           if (
             cursor.row === this.boardSize - 1 ||
             cursor.col === this.boardSize - 1
@@ -399,6 +401,7 @@ export default class Brain {
           break;
 
         case "upperRight":
+          // When reached the upper edge or right edge
           if (cursor.row === 0 || cursor.col === this.boardSize - 1)
             hasReachedEdge = true;
           else {

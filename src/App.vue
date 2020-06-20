@@ -17,7 +17,6 @@
           GitHub
         </span>
         <v-icon>mdi-open-in-new</v-icon>
-        <!-- <v-icon large>mdi-github</v-icon> -->
       </v-btn>
     </v-app-bar>
 
@@ -55,12 +54,12 @@ export default {
     Board,
     Panel,
   },
-  data: function() {
+  data: function () {
     return {
       title: "Gomoku",
     };
   },
-  mounted: function() {
+  mounted: function () {
     // Initialize the Vuex state
     this.$store.commit("initBoard");
   },
