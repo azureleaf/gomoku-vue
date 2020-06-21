@@ -93,7 +93,7 @@ export default class Brain {
 
     return array.map((squareVal) => {
       // When the square is empty, assign the score to it
-      if (squareVal === 0) return Math.pow(10, stonesTotal);
+      if (squareVal === 0) return Math.pow(100, stonesTotal);
       else return 0;
     });
   }
