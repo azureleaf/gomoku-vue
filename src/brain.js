@@ -210,8 +210,6 @@ export default class Brain {
     // Pick an empty square from the empty squares
     const randomIndex = Math.floor(Math.random() * emptySquares.length);
 
-    console.log("random move", emptySquares[randomIndex]);
-
     return emptySquares[randomIndex];
   }
 
@@ -224,8 +222,26 @@ export default class Brain {
    * @return {{ rowIndex: number, colIndex: number}}
    *    Next COM move
    */
-  getNextMove(boardStatus, isOsTurn) {
-    console.log("getNextMove() is called.:", boardStatus, isOsTurn);
+  getNextMove(boardStatus) {
+    // console.log("getNextMove() is called.:", boardStatus);
+
+    const sampleLine = [
+      { row: 0, col: 0, value: "X" },
+      { row: 1, col: 1, value: null },
+      { row: 2, col: 2, value: "O" },
+      { row: 3, col: 3, value: "O" },
+      { row: 4, col: 4, value: "O" },
+      { row: 5, col: 5, value: null },
+      { row: 6, col: 6, value: null },
+      { row: 7, col: 7, value: null },
+      { row: 8, col: 8, value: "X" },
+      { row: 9, col: 9, value: "O" },
+      { row: 10, col: 10, value: null },
+    ];
+
+    const matchResult = this.matchPatterns(sampleLine, this.patterns, "O");
+
+    console.log("test matching:", matchResult);
 
     return this.getRandomMove(boardStatus);
   }
@@ -234,22 +250,19 @@ export default class Brain {
    * Return the score board for the specified player based on the current board.
    *
    * @param {Array.<Array.<"O"|"X"|"">>} boardMatrix
-   *    Represents for the current board
+   *    Represents for the current board.
    * @param {boolean} isOsTurn
-   *    Declare for which player the score should be calculated
+   *    Declare for which player the score should be calculated.
    * @return {Array.<Array.<number>>}
-   *    Score for the player specified as a param ???
+   *    Score for all the squares for the player.
    */
   getScoreMatrix(boardMatrix, isOsTurn) {
-    // Get the origins & directions of all the lines to be scanned
-    const scanOrigins = this.getScanOrigins();
-
     // Each element in this array reprensents for
-    // a score array for the scanned single line
-    const lines = scanOrigins.reduce((lines, scanOrigin) => {
+    // a score array for the single line scanned
+    const lines = this.scanOrigins.reduce((lines, scanOrigin) => {
       return lines.concat(
-        // Template matching to the line,
-        // then get the array of squares with score
+        // Do template matching to the line,
+        // then get the score array of squares in it
         this.matchPattern(
           // Extract the line
           this.scanLine(
@@ -263,99 +276,103 @@ export default class Brain {
     }, []);
 
     // The board with evaluated score for every square.
-    // Initialize with zero-filling
+    // Initialize with zero-filling.
     let scoreMatrix = boardMatrix.map((row) => {
       return row.map(() => 0);
     });
 
-    // Sum scanning results square by square
-    for (let i = 0; i < lines.length; i++) {
-      scoreMatrix[lines[i].row][lines[i].col] += lines[i].score;
-    }
+    // Loop for all the scanned lines,
+    // sum the scores for each square.
+    lines.forEach((line) => {
+      scoreMatrix[line.row][line.col] += line.score;
+    });
 
     return scoreMatrix;
   }
 
   /**
-   * @param {Array.<{row: number, col: number, value: string|null}>} singleLine
+   * Do multiple pattern matchings to the line,
+   * return the array of accumulated scores for every square in the line
+   *
+   * @param {Array.<{row: number, col: number, value: string|null}>} lineSquares
    *    A line extracted. Every element represents for a square.
-   *    Note that the length of this line varies;
-   *    1 is the shortest, this.chainLength is the longest.
+   *    Note that the length of this line varies; from 1 to board size.
    * @param {Array.<{binary: Array.<number>, score: Array.<number>}>} patterns
-   *    pattern matching templates set by the class constructor
-   * @param {string} symbol
-   *    "O" or "X". Player this function is going to calculate the score for.
+   *    pattern matching templates which were set by the class constructor
+   * @param {string} playerSymbol
+   *    "O" or "X".
+   *    Player this function is going to calculate the score for.
    * @return {Array.<{ row: number, col: number, score: number}>}
-   *    Return the scores for every square inputted.
+   *    Return the scores for squares; squre with 0 score will be eliminated.
    *    e.g.
    *      input: ["X", null, null, "O", null, "O", "O", null], symbol: "O"
    *      output: [0, 100, 1000, 2100, 0, 0, 1000]
    */
-  matchPattern(singleLine, patterns, symbol) {
-    let scoreObj = [];
+  matchPatterns(lineSquares, patterns, playerSymbol) {
+    // Container of score for every square in the line
+    let squareScores = [];
 
-    // When input array is shorter than template patterns,
-    // no pattern will be matched, therefore abort
-    if (singleLine.length < this.chainLength) return scoreObj;
+    // No pattern will match when input array is shorter than template
+    if (lineSquares.length < this.chainLength) return squareScores;
 
-    // Convert array format to the one which is compatible with pattern array
-    // e.g.
-    //    Given that values in singleLine are like    ["X", "X", null, "O"],
-    //    When "symbol" is "X", this array turns into [   1,    1, 0, null]
-    //    When "symbol" is "O", this array turns into [null, null, 0,    1]
-    for (let i = 0; i < singleLine.length; i++) {
-      // Convert format
-      switch (singleLine[i].value) {
-        case symbol:
-          singleLine[i].value = 1;
-          break;
-        case null:
-          singleLine[i].value = 0;
-          break;
+    // Convert the symbol-based array into binary-ish array
+    // e.g. ["X", "X", null, "O"] into [null, null, 0, 1] for "O"
+    const lineBinary = lineSquares.map((square) => {
+      switch (square.value) {
+        case playerSymbol: // stone of this player
+          return 1;
+        case null: // empty square
+          return 0;
         default:
-          singleLine[i].value = null;
-          break;
+          // stone of the opponent player
+          return null;
       }
+    });
 
-      // Make scoreObj
-      scoreObj.push({
-        row: singleLine[i].row,
-        col: singleLine[i].col,
-        score: 0,
-      });
-    }
-
-    // Move the start position of matching one by one
-    // "cursor" moves inside input array
+    // Move the cursor position one by one
+    // lineCursor is the cursor position inside the line inputted
     for (
-      let cursorObj = 0;
-      cursorObj < singleLine.length - this.chainLength + 1;
-      cursorObj++
+      let lineCursor = 0;
+      lineCursor < lineSquares.length - this.chainLength + 1;
+      lineCursor++
     ) {
-      // Try to match every pattern to the array
-      for (let patIndex = 0; patIndex < patterns.length; patIndex++) {
-        // Try to match every position in a pattern
-        for (let cursorPat = 0; cursorPat < this.chainLength; cursorPat++) {
-          // If discrepancy is found, abort matching to the remainder, then go to next pattern
+      // Try to match every pattern at this cursor position
+      patterns.forEach((pattern) => {
+        // Try to match every square in the pattern
+        // patCursor is the cursor position inside the pattern
+        for (
+          let patCursor = 0;
+          patCursor < pattern.binary.length;
+          patCursor++
+        ) {
           if (
-            singleLine[cursorObj + cursorPat].value !==
-            patterns[patIndex].binary[cursorPat]
-          )
+            lineBinary[lineCursor + patCursor] !== pattern.binary[patCursor]
+          ) {
+            // Abort matching to this pattern when a discrepancy found
             break;
+          } else {
+            // When all the squares matched,
+            // assign the scores to the empty squares
+            if (patCursor === this.chainLength - 1) {
+              console.log("pattern matched:", pattern.binary);
 
-          // If reached the last cell of a pattern array
-          if (cursorPat === this.chainLength - 1) {
-            for (let i = 0; i < scoreObj.length; i++) {
-              // If that cell is blank, set score
-              if (patterns[patIndex].binary[i] === 0)
-                scoreObj[cursorObj + i].score += patterns[patIndex].score[i];
+              pattern.score.forEach((score, index) => {
+                // When the square is empty
+                if (score !== 0) {
+                  squareScores.push({
+                    row: lineSquares[lineCursor + index].row,
+                    col: lineSquares[lineCursor + index].col,
+                    score: score,
+                  });
+                }
+              });
             }
           }
         }
-      }
+      });
     }
 
-    return scoreObj;
+    return squareScores;
   }
 
   /**
@@ -365,8 +382,8 @@ export default class Brain {
    * until cursor reaches the edge of the board,
    * then return all the values in the line
    *
-   * @param {Array.<Array.<string|null>>} matrix
-   *  2D matrix of the game board with "O", "X", or "null"
+   * @param {Array.<Array.<string|null>>} boardMatrix
+   *  2D matrix of the game board with symbols of "O", "X", or "null"
    * @param {{row: number, col: number}} origin
    *  Position of the starting square of the each scan.
    * @param {string} direction
@@ -375,7 +392,7 @@ export default class Brain {
    * @return {Array.<{row: number, col: number, value: <string|null>}>}
    *  Coordinates & values of the squares in the line
    */
-  scanLine(matrix, origin, direction) {
+  scanLine(boardMatrix, origin, direction) {
     var cursor = {
       row: origin.row,
       col: origin.col,
@@ -392,7 +409,7 @@ export default class Brain {
       lineScanned.push({
         row: cursor.row,
         col: cursor.col,
-        value: matrix[cursor.row][cursor.col],
+        value: boardMatrix[cursor.row][cursor.col],
       });
 
       switch (direction) {
