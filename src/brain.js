@@ -223,8 +223,6 @@ export default class Brain {
    *    Next COM move
    */
   getNextMove(boardStatus) {
-    console.debug("board got", boardStatus);
-
     // const sampleLine1 = [
     //   { row: 0, col: 0, value: "X" },
     //   { row: 1, col: 1, value: "" },
@@ -343,8 +341,6 @@ export default class Brain {
       }
     });
 
-    console.log("binary array", lineBinary);
-
     // Move the cursor position one by one
     // lineCursor is the cursor position inside the line inputted
     for (
@@ -369,8 +365,6 @@ export default class Brain {
           } else {
             // When all the squares matched
             if (patCursor === this.chainLength - 1) {
-              console.debug("pattern matched:", pattern.binary);
-
               // Check if the winner is confirmed;
               // all the squares in the binary array are "1"
               if (pattern.binary.every((binary) => binary == 1)) {
