@@ -228,10 +228,10 @@ export default class Brain {
     const sampleLine = [
       { row: 0, col: 0, value: "X" },
       { row: 1, col: 1, value: null },
-      { row: 2, col: 2, value: "O" },
+      { row: 2, col: 2, value: null },
       { row: 3, col: 3, value: "O" },
       { row: 4, col: 4, value: "O" },
-      { row: 5, col: 5, value: null },
+      { row: 5, col: 5, value: "O" },
       { row: 6, col: 6, value: null },
       { row: 7, col: 7, value: null },
       { row: 8, col: 8, value: "X" },
@@ -302,18 +302,20 @@ export default class Brain {
    * @param {string} playerSymbol
    *    "O" or "X".
    *    Player this function is going to calculate the score for.
-   * @return {Array.<{ row: number, col: number, score: number}>}
+   * @return {{ winner: <string|null>, squareScores: Array.<{ row: number, col: number, score: number}>}}
    *    Return the scores for squares; squre with 0 score will be eliminated.
    *    e.g.
    *      input: ["X", null, null, "O", null, "O", "O", null], symbol: "O"
    *      output: [0, 100, 1000, 2100, 0, 0, 1000]
    */
   matchPatterns(lineSquares, patterns, playerSymbol) {
+    let isWinnerConfirmed = false;
     // Container of score for every square in the line
     let squareScores = [];
 
     // No pattern will match when input array is shorter than template
-    if (lineSquares.length < this.chainLength) return squareScores;
+    if (lineSquares.length < this.chainLength)
+      return { winner: null, squareScores };
 
     // Convert the symbol-based array into binary-ish array
     // e.g. ["X", "X", null, "O"] into [null, null, 0, 1] for "O"
@@ -356,6 +358,12 @@ export default class Brain {
             if (patCursor === this.chainLength - 1) {
               console.log("pattern matched:", pattern.binary);
 
+              if (pattern.binary.every((binary) => binary == 1)) {
+                console.log("winner confirmed!");
+                isWinnerConfirmed = true;
+                break;
+              }
+
               pattern.score.forEach((score, index) => {
                 // When the square is empty
                 if (score !== 0) {
@@ -372,7 +380,9 @@ export default class Brain {
       });
     }
 
-    return squareScores;
+    if (isWinnerConfirmed) return { winner: playerSymbol, squareScores: [] };
+
+    return { winner: null, squareScores };
   }
 
   /**
