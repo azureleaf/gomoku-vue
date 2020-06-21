@@ -214,7 +214,7 @@ export default class Brain {
   }
 
   /**
-   * Entry function for all the next move calculations
+   * Entry point for all the next move calculations
    * @param {Array.<Array.<"O"|"X"|"">>} boardStatus
    *    Represents for current board
    * @param {boolean} isOsTurn
@@ -223,8 +223,6 @@ export default class Brain {
    *    Next COM move
    */
   getNextMove(boardStatus) {
-    // console.log("getNextMove() is called.:", boardStatus);
-
     const sampleLine = [
       { row: 0, col: 0, value: "X" },
       { row: 1, col: 1, value: null },
@@ -240,8 +238,9 @@ export default class Brain {
     ];
 
     const matchResult = this.matchPatterns(sampleLine, this.patterns, "O");
+    console.log("matching to the sample line:", matchResult);
 
-    console.log("test matching:", matchResult);
+    this.getScoreMatrix(boardStatus, "O", this.scanOrigins);
 
     return this.getRandomMove(boardStatus);
   }
@@ -251,29 +250,43 @@ export default class Brain {
    *
    * @param {Array.<Array.<"O"|"X"|"">>} boardMatrix
    *    Represents for the current board.
-   * @param {boolean} isOsTurn
+   * @param {string} playerSymbol
+   *    "O" or "X".
    *    Declare for which player the score should be calculated.
    * @return {Array.<Array.<number>>}
    *    Score for all the squares for the player.
    */
-  getScoreMatrix(boardMatrix, isOsTurn) {
+  getScoreMatrix(boardMatrix, playerSymbol, scanOrigins) {
     // Each element in this array reprensents for
     // a score array for the single line scanned
-    const lines = this.scanOrigins.reduce((lines, scanOrigin) => {
-      return lines.concat(
+    const squareScores = scanOrigins.reduce((squareScores, scanOrigin) => {
+      const line = this.scanLine(
+        boardMatrix,
+        { row: scanOrigin.row, col: scanOrigin.col },
+        scanOrigin.direction
+      );
+
+      console.log("line", line);
+
+      const matchResult = this.matchPatterns(
+        // Extract the line
+        line,
+        this.patterns,
+        playerSymbol
+      );
+
+      console.log("match result", matchResult);
+
+      const scores = squareScores.concat(
         // Do template matching to the line,
         // then get the score array of squares in it
-        this.matchPattern(
-          // Extract the line
-          this.scanLine(
-            boardMatrix,
-            { row: scanOrigin.row, col: scanOrigin.col },
-            scanOrigin.direction
-          ),
-          isOsTurn
-        )
+        matchResult
       );
+
+      return scores;
     }, []);
+
+    console.log("all scores", squareScores);
 
     // The board with evaluated score for every square.
     // Initialize with zero-filling.
@@ -283,9 +296,9 @@ export default class Brain {
 
     // Loop for all the scanned lines,
     // sum the scores for each square.
-    lines.forEach((line) => {
-      scoreMatrix[line.row][line.col] += line.score;
-    });
+    // lines.forEach((line) => {
+    //   scoreMatrix[line.row][line.col] += line.score;
+    // });
 
     return scoreMatrix;
   }
@@ -302,7 +315,7 @@ export default class Brain {
    * @param {string} playerSymbol
    *    "O" or "X".
    *    Player this function is going to calculate the score for.
-   * @return {{ winner: <string|null>, squareScores: Array.<{ row: number, col: number, score: number}>}}
+   * @return {{ winner: <string|null>, squareScores: Array.<{ row: number, col: number, score: number }>}}
    *    Return the scores for squares; squre with 0 score will be eliminated.
    *    e.g.
    *      input: ["X", null, null, "O", null, "O", "O", null], symbol: "O"
@@ -331,6 +344,8 @@ export default class Brain {
       }
     });
 
+    console.log("binary array", lineBinary);
+
     // Move the cursor position one by one
     // lineCursor is the cursor position inside the line inputted
     for (
@@ -353,19 +368,21 @@ export default class Brain {
             // Abort matching to this pattern when a discrepancy found
             break;
           } else {
-            // When all the squares matched,
-            // assign the scores to the empty squares
+            // When all the squares matched
             if (patCursor === this.chainLength - 1) {
-              console.log("pattern matched:", pattern.binary);
+              console.debug("pattern matched:", pattern.binary);
 
+              // Check if the winner is confirmed;
+              // all the squares in the binary array are "1"
               if (pattern.binary.every((binary) => binary == 1)) {
-                console.log("winner confirmed!");
+                console.debug("winner confirmed!");
                 isWinnerConfirmed = true;
                 break;
               }
 
+              // Assign the scores to the empty squares
               pattern.score.forEach((score, index) => {
-                // When the square is empty
+                // Ignore non-empty squares
                 if (score !== 0) {
                   squareScores.push({
                     row: lineSquares[lineCursor + index].row,
@@ -459,7 +476,7 @@ export default class Brain {
           break;
 
         default:
-          console.error("Error: unknown direction: ", direction);
+          console.error("Error: unknown direction '", direction, "'");
           return null;
       }
     }
