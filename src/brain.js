@@ -223,22 +223,41 @@ export default class Brain {
    *    Next COM move
    */
   getNextMove(boardStatus) {
-    const sampleLine = [
-      { row: 0, col: 0, value: "X" },
-      { row: 1, col: 1, value: null },
-      { row: 2, col: 2, value: null },
-      { row: 3, col: 3, value: "O" },
-      { row: 4, col: 4, value: "O" },
-      { row: 5, col: 5, value: "O" },
-      { row: 6, col: 6, value: null },
-      { row: 7, col: 7, value: null },
-      { row: 8, col: 8, value: "X" },
-      { row: 9, col: 9, value: "O" },
-      { row: 10, col: 10, value: null },
+    console.debug("board got", boardStatus);
+
+    // const sampleLine1 = [
+    //   { row: 0, col: 0, value: "X" },
+    //   { row: 1, col: 1, value: "" },
+    //   { row: 2, col: 2, value: "" },
+    //   { row: 3, col: 3, value: "O" },
+    //   { row: 4, col: 4, value: "O" },
+    //   { row: 5, col: 5, value: "O" },
+    //   { row: 6, col: 6, value: "" },
+    //   { row: 7, col: 7, value: "" },
+    //   { row: 8, col: 8, value: "X" },
+    //   { row: 9, col: 9, value: "O" },
+    //   { row: 10, col: 10, value: "" },
+    // ];
+
+    const sampleLine2 = [
+      { row: 0, col: 0, value: "O" },
+      { row: 1, col: 1, value: "" },
+      { row: 2, col: 2, value: "" },
+      { row: 3, col: 3, value: "" },
+      { row: 4, col: 4, value: "" },
+      { row: 5, col: 5, value: "" },
+      { row: 6, col: 6, value: "" },
+      { row: 7, col: 7, value: "" },
+      { row: 8, col: 8, value: "" },
+      { row: 9, col: 9, value: "" },
+      { row: 10, col: 10, value: "" },
     ];
 
-    const matchResult = this.matchPatterns(sampleLine, this.patterns, "O");
-    console.log("matching to the sample line:", matchResult);
+    // const matchResult1 = this.matchPatterns(sampleLine1, this.patterns, "O");
+    const matchResult2 = this.matchPatterns(sampleLine2, this.patterns, "O");
+
+    // console.log("matching to the sample line 1:", matchResult1);
+    console.log("matching to the sample line 2:", matchResult2);
 
     this.getScoreMatrix(boardStatus, "O", this.scanOrigins);
 
@@ -336,7 +355,7 @@ export default class Brain {
       switch (square.value) {
         case playerSymbol: // stone of this player
           return 1;
-        case null: // empty square
+        case "": // empty square
           return 0;
         default:
           // stone of the opponent player
