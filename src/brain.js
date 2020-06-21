@@ -238,26 +238,8 @@ export default class Brain {
     //   { row: 9, col: 9, value: "O" },
     //   { row: 10, col: 10, value: "" },
     // ];
-
-    const sampleLine2 = [
-      { row: 0, col: 0, value: "O" },
-      { row: 1, col: 1, value: "" },
-      { row: 2, col: 2, value: "" },
-      { row: 3, col: 3, value: "" },
-      { row: 4, col: 4, value: "" },
-      { row: 5, col: 5, value: "" },
-      { row: 6, col: 6, value: "" },
-      { row: 7, col: 7, value: "" },
-      { row: 8, col: 8, value: "" },
-      { row: 9, col: 9, value: "" },
-      { row: 10, col: 10, value: "" },
-    ];
-
     // const matchResult1 = this.matchPatterns(sampleLine1, this.patterns, "O");
-    const matchResult2 = this.matchPatterns(sampleLine2, this.patterns, "O");
-
     // console.log("matching to the sample line 1:", matchResult1);
-    console.log("matching to the sample line 2:", matchResult2);
 
     this.getScoreMatrix(boardStatus, "O", this.scanOrigins);
 
@@ -278,34 +260,25 @@ export default class Brain {
   getScoreMatrix(boardMatrix, playerSymbol, scanOrigins) {
     // Each element in this array reprensents for
     // a score array for the single line scanned
-    const squareScores = scanOrigins.reduce((squareScores, scanOrigin) => {
+    const lines = scanOrigins.reduce((lines, scanOrigin) => {
+      // Extract a line
       const line = this.scanLine(
         boardMatrix,
         { row: scanOrigin.row, col: scanOrigin.col },
         scanOrigin.direction
       );
 
-      console.log("line", line);
-
-      const matchResult = this.matchPatterns(
-        // Extract the line
-        line,
-        this.patterns,
-        playerSymbol
-      );
-
-      console.log("match result", matchResult);
-
-      const scores = squareScores.concat(
+      return lines.concat(
         // Do template matching to the line,
         // then get the score array of squares in it
-        matchResult
+        this.matchPatterns(
+          // Extract the line
+          line,
+          this.patterns,
+          playerSymbol
+        )
       );
-
-      return scores;
     }, []);
-
-    console.log("all scores", squareScores);
 
     // The board with evaluated score for every square.
     // Initialize with zero-filling.
@@ -315,9 +288,16 @@ export default class Brain {
 
     // Loop for all the scanned lines,
     // sum the scores for each square.
-    // lines.forEach((line) => {
-    //   scoreMatrix[line.row][line.col] += line.score;
-    // });
+    lines.forEach((line) => {
+      if (line.winner) console.log("winner:", line.winner);
+      else {
+        line.squareScores.forEach((square) => {
+          scoreMatrix[square.row][square.col] += square.score;
+        });
+      }
+    });
+
+    console.log("mat", scoreMatrix);
 
     return scoreMatrix;
   }
