@@ -13,6 +13,7 @@ export default new Vuex.Store({
     history: [], // {row: number, col: number, symbol: string}
     brain: "", // place for the instance of COM player algorithm
     nextComMove: "", // {row: number, col: number}
+    winner: "",
   },
   mutations: {
     initBoard(state) {
@@ -31,9 +32,24 @@ export default new Vuex.Store({
       state.boardSize = payload.boardSize;
     },
     getNextComMove(state) {
-      state.nextComMove = state.brain.getNextMove(state.boardStatus);
+      const { rowIndex, colIndex, winner } = state.brain.getNextMove(
+        state.boardStatus
+      );
+
+      // Don't set next move when the winner is confirmed / game is a draw
+      if (winner || winner === null) {
+        console.log("state: game end.");
+        state.winner = winner;
+        return;
+      }
+
+      // Winner key isn't necessary to store in the state
+      state.nextComMove = { rowIndex, colIndex };
     },
     putStone(state, payload) {
+      // When the game is draw or winner is confirmed, abort
+      if (state.winner !== "") return;
+
       // Update only when the square is empty
       if (state.boardStatus[payload.rowIndex][payload.colIndex].length == 0) {
         // Update state board
