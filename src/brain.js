@@ -200,6 +200,7 @@ export default class Brain {
     boardStatus.forEach((row, rowIndex) => {
       row.forEach((col, colIndex) => {
         if (col == "")
+          // When the square is empty
           emptySquares.push({
             rowIndex: rowIndex,
             colIndex: colIndex,
@@ -239,9 +240,38 @@ export default class Brain {
     // const matchResult1 = this.matchPatterns(sampleLine1, this.patterns, "O");
     // console.log("matching to the sample line 1:", matchResult1);
 
-    this.getScoreMatrix(boardStatus, "O", this.scanOrigins);
+    const scores = {
+      O: this.getScoreMatrix(boardStatus, "O", this.scanOrigins),
+      X: this.getScoreMatrix(boardStatus, "X", this.scanOrigins),
+    };
 
-    return this.getRandomMove(boardStatus);
+    console.log("scores", scores);
+
+    let nextMove = { row: null, col: null, compositeScore: 0 };
+
+    // Sum the scores for O & X with weight
+    const compositeScores = scores.O.map((row, rowIndex) => {
+      return row.map((col, colIndex) => {
+        const compositeScore = col + scores.X[rowIndex][colIndex];
+
+        // Remember the square with the highest score
+        if (compositeScore > nextMove.compositeScore) {
+          nextMove.row = rowIndex;
+          nextMove.col = colIndex;
+          nextMove.compositeScore = compositeScore;
+        }
+
+        return compositeScore;
+      });
+    });
+
+    console.log("composite", compositeScores);
+
+    console.log("next move", nextMove);
+
+    // return this.getRandomMove(boardStatus);
+
+    return { rowIndex: nextMove.row, colIndex: nextMove.col };
   }
 
   /**
@@ -294,8 +324,6 @@ export default class Brain {
         });
       }
     });
-
-    console.log("mat", scoreMatrix);
 
     return scoreMatrix;
   }
