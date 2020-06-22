@@ -374,14 +374,20 @@ export default class Brain {
             // When all the squares matched
             if (patCursor === this.chainLength - 1) {
               // Check if the winner is confirmed;
-              // when the player is "checkmate", that is
-              // there needs one more stone to win and it's his turn,
-              // set his symbol as the winner
               if (
-                pattern.binary.reduce((sum, binary) => sum + binary) ==
-                this.chainLength - 1
+                // Human player wins simply when full-length stone chain is matched
+                playerSymbol == "O" &&
+                pattern.binary.every((binary) => binary == 1)
               ) {
-                this.winner = playerSymbol;
+                this.winner = "O";
+              } else if (
+                // The COM player will win when
+                // there needs one more stone to win.
+                playerSymbol == "X" &&
+                pattern.binary.reduce((sum, binary) => sum + binary) ==
+                  this.chainLength - 1
+              ) {
+                this.winner = "X";
               }
 
               // Assign the scores to the empty squares
