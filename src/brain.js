@@ -226,6 +226,9 @@ export default class Brain {
    *    Next COM move
    */
   getNextMove(boardStatus) {
+    // When true, the COM will returns the random move
+    const isDebug = true;
+
     // Evaluate scores for the current board for both players
     const scores = {
       O: this.getScoreMatrix(boardStatus, "O", this.scanOrigins),
@@ -261,7 +264,10 @@ export default class Brain {
     }
 
     /** for debugging: randomly choose the empty cell */
-    // return this.getRandomMove(boardStatus);
+    if (isDebug) {
+      const { rowIndex, colIndex } = this.getRandomMove(boardStatus);
+      return { rowIndex, colIndex, winner: this.winner };
+    }
 
     return {
       rowIndex: nextMove.row,
