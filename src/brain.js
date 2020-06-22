@@ -13,6 +13,7 @@ export default class Brain {
     this.patterns = this.getPatterns(); // matching templates
     this.scanOrigins = this.getScanOrigins(); // scan directions
     this.disturbance = 1.0; // Priority: disturbing the human chain VS building the COM chain
+    this.winner = null; // Symbol of the winner if confirmed
   }
 
   /**
@@ -301,12 +302,9 @@ export default class Brain {
     // Loop for all the scanned lines,
     // sum the scores for each square.
     lines.forEach((line) => {
-      if (line.winner) console.log("winner:", line.winner);
-      else {
-        line.squareScores.forEach((square) => {
-          scoreMatrix[square.row][square.col] += square.score;
-        });
-      }
+      line.squareScores.forEach((square) => {
+        scoreMatrix[square.row][square.col] += square.score;
+      });
     });
 
     return scoreMatrix;
@@ -331,7 +329,6 @@ export default class Brain {
    *      output: [0, 100, 1000, 2100, 0, 0, 1000]
    */
   matchPatterns(lineSquares, patterns, playerSymbol) {
-    let isWinnerConfirmed = false;
     // Container of score for every square in the line
     let squareScores = [];
 
@@ -378,11 +375,15 @@ export default class Brain {
             // When all the squares matched
             if (patCursor === this.chainLength - 1) {
               // Check if the winner is confirmed;
-              // all the squares in the binary array are "1"
-              if (pattern.binary.every((binary) => binary == 1)) {
+              // when the player is "checkmate", that is
+              // there needs one more stone to win and it's his turn,
+              // set his symbol as the winner
+              if (
+                pattern.binary.reduce((sum, binary) => sum + binary) ==
+                this.chainLength - 1
+              ) {
                 console.debug("winner confirmed!");
-                isWinnerConfirmed = true;
-                break;
+                this.winner = playerSymbol;
               }
 
               // Assign the scores to the empty squares
@@ -402,9 +403,7 @@ export default class Brain {
       });
     }
 
-    if (isWinnerConfirmed) return { winner: playerSymbol, squareScores: [] };
-
-    return { winner: null, squareScores };
+    return { winner: this.winner ? playerSymbol : null, squareScores };
   }
 
   /**
