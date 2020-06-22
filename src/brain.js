@@ -13,7 +13,7 @@ export default class Brain {
     this.patterns = this.getPatterns(); // matching templates
     this.scanOrigins = this.getScanOrigins(); // scan directions
     this.disturbance = 1.0; // Priority: disturbing the human chain VS building the COM chain
-    this.winner = null; // Symbol of the winner if confirmed
+    this.winner = ""; // Symbol of the winner if confirmed
   }
 
   /**
@@ -251,14 +251,23 @@ export default class Brain {
       });
     });
 
-    console.log("Composite scores:", compositeScores);
+    console.debug("Composite scores:", compositeScores);
 
     if (this.winner) console.log("Winner:", this.winner);
+
+    if (nextMove.row == null && nextMove.col == null) {
+      this.winner = null;
+      console.log("Draw game!");
+    }
 
     /** for debugging: randomly choose the empty cell */
     // return this.getRandomMove(boardStatus);
 
-    return { rowIndex: nextMove.row, colIndex: nextMove.col };
+    return {
+      rowIndex: nextMove.row,
+      colIndex: nextMove.col,
+      winner: this.winner,
+    };
   }
 
   /**
