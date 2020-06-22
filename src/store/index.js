@@ -40,6 +40,10 @@ export default new Vuex.Store({
       if (winner || winner === null) {
         console.log("state: game end.");
         state.winner = winner;
+      }
+
+      if (rowIndex == null || colIndex == null) {
+        console.log("either index is null.");
         return;
       }
 

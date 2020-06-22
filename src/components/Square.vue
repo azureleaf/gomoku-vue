@@ -39,8 +39,11 @@ export default {
   methods: {
     handleSquareClick: function () {
       // Do nothing when the clicked square already has a symbol
+      // or the winner is confirmed, or the game is a draw
       if (
-        this.$store.state.boardStatus[this.rowIndex][this.colIndex].length == 0
+        this.$store.state.boardStatus[this.rowIndex][this.colIndex].length ==
+          0 &&
+        this.$store.state.winner === ""
       ) {
         // Tell the parent component that this square is clicked
         this.$emit("isClicked", this.rowIndex, this.colIndex);
