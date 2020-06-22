@@ -12,6 +12,7 @@ export default class Brain {
     this.chainLength = chainLength;
     this.patterns = this.getPatterns(); // matching templates
     this.scanOrigins = this.getScanOrigins(); // scan directions
+    this.disturbance = 1.0; // Priority: disturbing the human chain VS building the COM chain
   }
 
   /**
@@ -224,35 +225,19 @@ export default class Brain {
    *    Next COM move
    */
   getNextMove(boardStatus) {
-    // const sampleLine1 = [
-    //   { row: 0, col: 0, value: "X" },
-    //   { row: 1, col: 1, value: "" },
-    //   { row: 2, col: 2, value: "" },
-    //   { row: 3, col: 3, value: "O" },
-    //   { row: 4, col: 4, value: "O" },
-    //   { row: 5, col: 5, value: "O" },
-    //   { row: 6, col: 6, value: "" },
-    //   { row: 7, col: 7, value: "" },
-    //   { row: 8, col: 8, value: "X" },
-    //   { row: 9, col: 9, value: "O" },
-    //   { row: 10, col: 10, value: "" },
-    // ];
-    // const matchResult1 = this.matchPatterns(sampleLine1, this.patterns, "O");
-    // console.log("matching to the sample line 1:", matchResult1);
-
+    // Evaluate scores for the current board for both players
     const scores = {
       O: this.getScoreMatrix(boardStatus, "O", this.scanOrigins),
       X: this.getScoreMatrix(boardStatus, "X", this.scanOrigins),
     };
-
-    console.log("scores", scores);
 
     let nextMove = { row: null, col: null, compositeScore: 0 };
 
     // Sum the scores for O & X with weight
     const compositeScores = scores.O.map((row, rowIndex) => {
       return row.map((col, colIndex) => {
-        const compositeScore = col + scores.X[rowIndex][colIndex];
+        const compositeScore =
+          col * this.disturbance + scores.X[rowIndex][colIndex];
 
         // Remember the square with the highest score
         if (compositeScore > nextMove.compositeScore) {
@@ -265,10 +250,9 @@ export default class Brain {
       });
     });
 
-    console.log("composite", compositeScores);
+    console.log("Composite scores:", compositeScores);
 
-    console.log("next move", nextMove);
-
+    /** for debugging: randomly choose the empty cell */
     // return this.getRandomMove(boardStatus);
 
     return { rowIndex: nextMove.row, colIndex: nextMove.col };
