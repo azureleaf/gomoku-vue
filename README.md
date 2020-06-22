@@ -13,35 +13,40 @@
     - [Lints and fixes files](#lints-and-fixes-files)
     - [Customize configuration](#customize-configuration)
   - [File Hierarchy](#file-hierarchy)
-  - [Calling relationships of functions in `brain.js`](#calling-relationships-of-functions-in-brainjs)
-
+  - [Function Relationships in `brain.js`](#function-relationships-in-brainjs)
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
 ### Run your unit tests
+
 ```
 npm run test:unit
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## File Hierarchy
@@ -58,12 +63,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - Called from the Vuex mutator.
   - Get the current board, return the next move calculated.
 - `store/index.js`
-  - Hold the current board status which should be shared with Vue components.
+  - Hold the current board status which should be shared among Vue components.
+  - Keep `Brain` instance as a state.
+  - `putStone()` mutator puts new stone to the board.
+  - `getNextComMove()` mutator asks `Brain` the next COM move. When the `Brain` says the game winner is confirmed, this mutator sets the winner as a state.
 - `main.js`
   - Entry point of the whole app.
   - Register Vue files & plugins.
 
-## Calling relationships of functions in `brain.js`
+## Function Relationships in `brain.js`
 
 - `getPatterns()`: Generate matching template. Called by the constructor.
   - `getBinaryArray()` : Return matching patterns with 0 and 1.
@@ -72,6 +80,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - `getScanOrigins()` : Return starting points & directions of the line scans.
 - `getNextMove()` : Return the position of the next COM player move.
   - `getScoreMatrix()` : Return evaluated score for every square for both players.
-    - `matchPattern()` : Pattern match and return the square scores for the single line.
+    - `matchPatterns()` : Pattern match and return the square scores for the single line.
       - `scanLine()` : Extract the content of the single line from the board.
 - `getRandomMove()` : for debugging. Randomly find the empty square in the board.
