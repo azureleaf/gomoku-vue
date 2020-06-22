@@ -253,6 +253,8 @@ export default class Brain {
 
     console.log("Composite scores:", compositeScores);
 
+    if (this.winner) console.log("Winner:", this.winner);
+
     /** for debugging: randomly choose the empty cell */
     // return this.getRandomMove(boardStatus);
 
@@ -273,7 +275,7 @@ export default class Brain {
   getScoreMatrix(boardMatrix, playerSymbol, scanOrigins) {
     // Each element in this array reprensents for
     // a score array for the single line scanned
-    const lines = scanOrigins.reduce((lines, scanOrigin) => {
+    const squares = scanOrigins.reduce((lines, scanOrigin) => {
       // Extract a line
       const line = this.scanLine(
         boardMatrix,
@@ -301,10 +303,8 @@ export default class Brain {
 
     // Loop for all the scanned lines,
     // sum the scores for each square.
-    lines.forEach((line) => {
-      line.squareScores.forEach((square) => {
-        scoreMatrix[square.row][square.col] += square.score;
-      });
+    squares.forEach((square) => {
+      scoreMatrix[square.row][square.col] += square.score;
     });
 
     return scoreMatrix;
@@ -333,8 +333,7 @@ export default class Brain {
     let squareScores = [];
 
     // No pattern will match when input array is shorter than template
-    if (lineSquares.length < this.chainLength)
-      return { winner: null, squareScores };
+    if (lineSquares.length < this.chainLength) return squareScores;
 
     // Convert the symbol-based array into binary-ish array
     // e.g. ["X", "X", null, "O"] into [null, null, 0, 1] for "O"
@@ -382,7 +381,6 @@ export default class Brain {
                 pattern.binary.reduce((sum, binary) => sum + binary) ==
                 this.chainLength - 1
               ) {
-                console.debug("winner confirmed!");
                 this.winner = playerSymbol;
               }
 
@@ -403,7 +401,7 @@ export default class Brain {
       });
     }
 
-    return { winner: this.winner ? playerSymbol : null, squareScores };
+    return squareScores;
   }
 
   /**
