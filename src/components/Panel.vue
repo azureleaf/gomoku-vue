@@ -4,8 +4,7 @@
       <v-card class="setFont" color="deep-orange" dark>
         <v-card-title class="justify-center">Reset the game?</v-card-title>
         <v-card-text class="text-center">
-          New Board Size: {{ this.boardSize }}<br />New Chain Length:
-          {{ this.chainLength }}
+          New Board Size: {{ this.boardSize }}
         </v-card-text>
         <v-spacer></v-spacer>
         <v-card-actions class="justify-center">
@@ -41,7 +40,7 @@
       <span class="largeText ml-1">{{ activePlayer }}</span>
     </p>
     <v-row>
-      <v-col cols="12" md="6" class="px-1">
+      <!-- <v-col cols="12" md="6" class="px-1">
         <v-btn
           class="disableCapsLock ma-1"
           depressed
@@ -51,8 +50,8 @@
         >
           <v-icon class="mr-1">mdi-arrow-left-drop-circle</v-icon>Back
         </v-btn>
-      </v-col>
-      <v-col cols="12" md="6" class="px-1">
+      </v-col> -->
+      <v-col cols="12" class="px-1">
         <v-btn
           class="disableCapsLock ma-1"
           depressed
