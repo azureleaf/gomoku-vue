@@ -16,7 +16,9 @@ export default new Vuex.Store({
     winner: "", // "O", "X", "null" when a draw game, "" when not settled yet
   },
   mutations: {
+    // Note that new board size must be set as the state value before this init
     initBoard(state) {
+      // Init board
       for (let i = 0; i < state.boardSize; i++) {
         state.boardStatus.push(Array(state.boardSize).fill(""));
       }
@@ -27,9 +29,20 @@ export default new Vuex.Store({
         state.boardSize,
         state.chainLength
       );
+
+      // Clear other states
+      state.nextComMove = "";
+      state.winner = "";
+      state.isOsTurn = true;
+      state.history = [];
     },
     updateBoardSize(state, payload) {
+      console.log("state: got board size", payload.boardSize);
       state.boardSize = payload.boardSize;
+
+      // Here needs to init the state
+
+      // Here needs to clear the UI
     },
     getNextComMove(state) {
       let { rowIndex, colIndex, winner } = state.brain.getNextMove(

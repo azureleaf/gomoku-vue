@@ -12,6 +12,7 @@
         @isClicked="handleSquareClick"
       ></Square>
     </div>
+    <!-- Dialog box which shows the result of the game (winner / draw) -->
     <v-dialog v-model="isDialogOpen" max-width="300px">
       <v-card class="setFont" color="deep-orange" dark>
         <v-card-title class="justify-center"

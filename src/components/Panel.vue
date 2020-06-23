@@ -1,5 +1,6 @@
 <template>
   <v-container class="setFont">
+    <!-- Dialog box to confirm the game reset -->
     <v-dialog v-model="isDialogOpen" max-width="300px">
       <v-card class="setFont" color="deep-orange" dark>
         <v-card-title class="justify-center">Reset the game?</v-card-title>
@@ -21,7 +22,7 @@
           <v-btn
             color="white"
             text
-            @click="isDialogOpen = false"
+            @click="handleGameResetBtn"
             outlined
             class="mx-2"
             style="border-width: 2px;"
@@ -109,7 +110,7 @@
 <script>
 export default {
   name: "Panel",
-  data: function () {
+  data() {
     return {
       boardSize: 10,
       chainLength: 5,
@@ -122,10 +123,10 @@ export default {
     };
   },
   computed: {
-    turns: function () {
+    turns() {
       return this.$store.state.history.length + 1;
     },
-    activePlayer: function () {
+    activePlayer() {
       return this.$store.state.isOsTurn ? "O" : "X";
     },
   },
@@ -155,6 +156,10 @@ export default {
         this.chainLengthLimit.max = 5;
       }
       this.openSnackbar();
+    },
+    handleGameResetBtn() {
+      this.isDialogOpen = false;
+      this.$store.commit("updateBoardSize", { boardSize: this.boardSize });
     },
     openSnackbar() {
       if (this.hasShownSnackbar) return;
