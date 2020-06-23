@@ -238,7 +238,7 @@ export default class Brain {
     let nextMove = { row: null, col: null, compositeScore: 0 };
 
     // Sum the scores for O & X with weight
-    const compositeScores = scores.O.map((row, rowIndex) => {
+    scores.O.map((row, rowIndex) => {
       return row.map((col, colIndex) => {
         const compositeScore =
           col * this.disturbance + scores.X[rowIndex][colIndex];
@@ -253,8 +253,6 @@ export default class Brain {
         return compositeScore;
       });
     });
-
-    console.debug("Composite scores:", compositeScores);
 
     if (this.winner) console.log("Winner:", this.winner);
 
