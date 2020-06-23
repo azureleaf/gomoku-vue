@@ -69,7 +69,7 @@
       Board Size
     </p>
     <v-slider
-      class="mt-5 pt-5"
+      class="mt-6 pt-5"
       v-model="boardSize"
       step="1"
       :max="boardSizeLimit.max"
@@ -83,9 +83,9 @@
       @change="updateChainLengthLimits()"
     ></v-slider>
 
-    <p>Chain Length</p>
+    <!-- <p>Chain Length</p> -->
 
-    <v-slider
+    <!-- <v-slider
       class="mt-5 pt-5"
       v-model="chainLength"
       step="1"
@@ -98,7 +98,7 @@
       ticks="always"
       tick-size="5"
       @change="openSnackbar()"
-    ></v-slider>
+    ></v-slider> -->
     <v-snackbar v-model="isSnackbarOpen" :timeout="10000" color="grey darken-3">
       To apply changes, please reset the game!
       <v-btn color="deep-orange" text @click="isSnackbarOpen = false">
@@ -116,7 +116,7 @@ export default {
       chainLength: 5,
       uniColor: "deep-orange",
       chainLengthLimit: { max: 5, min: 3 },
-      boardSizeLimit: { max: 20, min: 3 },
+      boardSizeLimit: { max: 20, min: 5 },
       isDialogOpen: false,
       isSnackbarOpen: false,
       hasShownSnackbar: false,
