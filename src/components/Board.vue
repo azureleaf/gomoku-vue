@@ -12,6 +12,27 @@
         @isClicked="handleSquareClick"
       ></Square>
     </div>
+    <v-dialog v-model="isDialogOpen" max-width="300px">
+      <v-card class="setFont" color="deep-orange" dark>
+        <v-card-title class="justify-center"
+          ><span v-if="winner == 'O' || winner == 'X'"
+            >{{ winner }} won the game!</span
+          ><span v-else>Draw!</span></v-card-title
+        >
+        <v-card-actions class="justify-center">
+          <v-btn
+            color="white"
+            text
+            @click="isDialogOpen = false"
+            outlined
+            class="mx-2"
+            style="border-width: 2px;"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -28,7 +49,18 @@ export default {
       boardHeight: this.$store.state.boardSize,
       boardWidth: this.$store.state.boardSize,
       boardBools: [], // tell if every square has O or X
+      isDialogOpen: false,
     };
+  },
+  computed: {
+    winner() {
+      return this.$store.state.winner;
+    },
+  },
+  watch: {
+    winner() {
+      this.isDialogOpen = true;
+    },
   },
   methods: {
     async handleSquareClick(rowIndex, colIndex) {
@@ -70,7 +102,7 @@ export default {
       }
     },
   },
-  created: function () {
+  created() {
     // Initialize the board for booleans
     // This process can't be put in "mounted",
     // because boardBools[] is required for <template> rendering

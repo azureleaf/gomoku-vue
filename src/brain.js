@@ -227,7 +227,7 @@ export default class Brain {
    */
   getNextMove(boardStatus) {
     // When true, the COM will returns the random move
-    const isDebug = true;
+    const isDebug = false;
 
     // Evaluate scores for the current board for both players
     const scores = {
