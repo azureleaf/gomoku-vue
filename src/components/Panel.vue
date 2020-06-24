@@ -71,12 +71,6 @@
       tick-size="5"
       @change="updateChainLengthLimits()"
     ></v-slider>
-    <v-snackbar v-model="isSnackbarOpen" :timeout="10000" color="grey darken-3">
-      To apply changes, please reset the game!
-      <v-btn color="deep-orange" text @click="isSnackbarOpen = false">
-        OK
-      </v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 <script>

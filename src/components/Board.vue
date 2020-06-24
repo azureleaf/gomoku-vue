@@ -18,8 +18,11 @@
         <v-card-title class="justify-center"
           ><span v-if="winner == 'O' || winner == 'X'"
             >{{ winner }} won the game!</span
-          ><span v-else>Draw!</span></v-card-title
+          ><span v-else>Draw</span></v-card-title
         >
+        <v-card-text v-if="winner != 'O' && winner != 'X'" class="text-center"
+          >Please reset the game.
+        </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn
             color="white"
