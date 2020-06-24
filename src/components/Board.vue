@@ -63,8 +63,12 @@ export default {
     },
   },
   watch: {
-    winner() {
-      this.isDialogOpen = true;
+    winner(newVal, oldVal) {
+      // Show the dialog box only when the game status is set
+      // Don't show the box when it's just an initialization of the winner
+      if (oldVal == "") {
+        this.isDialogOpen = true;
+      }
     },
     isResetRequested(newVal, oldVal) {
       if (oldVal == false && newVal == true) {

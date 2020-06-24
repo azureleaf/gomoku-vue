@@ -7,8 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     boardStatus: [], // board with O & X symbols
-    boardSize: 10, // assumption: board is square-shaped
-    chainLength: 5, // length of the stones necessary to win the game
+    boardSize: 12, // number of squares of a side of the square-shaped board
+    chainLength: 5, // number of the stones necessary to win the game
     isOsTurn: true,
     history: [], // {row: number, col: number, symbol: string}
     brain: "", // place for the instance of COM player algorithm

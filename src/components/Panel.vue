@@ -112,7 +112,7 @@ export default {
   name: "Panel",
   data() {
     return {
-      boardSize: 10,
+      boardSize: null,
       chainLength: 5,
       uniColor: "deep-orange",
       chainLengthLimit: { max: 5, min: 3 },
@@ -166,6 +166,9 @@ export default {
       this.hasShownSnackbar = true;
       this.isSnackbarOpen = true;
     },
+  },
+  mounted() {
+    this.boardSize = this.$store.state.boardSize;
   },
 };
 </script>
