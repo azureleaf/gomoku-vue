@@ -14,6 +14,7 @@ export default new Vuex.Store({
     brain: "", // place for the instance of COM player algorithm
     nextComMove: "", // {row: number, col: number}
     winner: "", // "O", "X", "null" when a draw game, "" when not settled yet
+    isResetRequested: false,
   },
   mutations: {
     // Note that new board size must be set as the state value before this init
@@ -35,14 +36,17 @@ export default new Vuex.Store({
       state.winner = "";
       state.isOsTurn = true;
       state.history = [];
+      state.isResetRequested = false;
     },
     updateBoardSize(state, payload) {
-      console.log("state: got board size", payload.boardSize);
+      console.log("state: got new board size", payload.boardSize);
       state.boardSize = payload.boardSize;
 
       // Here needs to init the state
 
       // Here needs to clear the UI
+      // Don't forget to turn off this flag later when the reset is done
+      state.isResetRequested = true;
     },
     getNextComMove(state) {
       let { rowIndex, colIndex, winner } = state.brain.getNextMove(
