@@ -1,8 +1,8 @@
 <template>
   <div class="board">
-    <div v-for="rowIndex in boardHeight" :key="rowIndex - 1">
+    <div v-for="rowIndex in boardSize" :key="rowIndex - 1">
       <Square
-        v-for="colIndex in boardWidth"
+        v-for="colIndex in boardSize"
         :key="(rowIndex - 1) * 100 + (colIndex - 1)"
         :rowIndex="rowIndex - 1"
         :colIndex="colIndex - 1"
@@ -47,8 +47,6 @@ export default {
   },
   data() {
     return {
-      boardHeight: this.$store.state.boardSize,
-      boardWidth: this.$store.state.boardSize,
       boardBools: [], // tell if every square has O or X
       isDialogOpen: false,
     };
@@ -59,6 +57,9 @@ export default {
     },
     isResetRequested() {
       return this.$store.state.isResetRequested;
+    },
+    boardSize() {
+      return this.$store.state.boardSize;
     },
   },
   watch: {
@@ -119,11 +120,11 @@ export default {
       this.boardBools = [];
 
       // Initialize the board for booleans.
-      for (let i = 0; i < this.boardHeight; i++) {
+      for (let i = 0; i < this.boardSize; i++) {
         this.boardBools.push(
           // Note that by .fill(Object), every Object will be the reference to each other
           // So you need to use .map() to keep them independent
-          Array(this.boardWidth)
+          Array(this.boardSize)
             .fill()
             .map(() => {
               // at first all the squares are empty
