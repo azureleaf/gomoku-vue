@@ -67,8 +67,11 @@ export default {
     },
     isResetRequested(newVal, oldVal) {
       if (oldVal == false && newVal == true) {
-        console.log("Board.vue: Going to reset the UI!");
+        // Init UI board
         this.initBoard();
+
+        // Init state board
+        this.$store.commit("initBoard");
       }
     },
   },

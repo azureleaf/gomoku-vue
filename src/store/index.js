@@ -19,6 +19,8 @@ export default new Vuex.Store({
   mutations: {
     // Note that new board size must be set as the state value before this init
     initBoard(state) {
+      state.boardStatus = [];
+
       // Init board
       for (let i = 0; i < state.boardSize; i++) {
         state.boardStatus.push(Array(state.boardSize).fill(""));
@@ -42,10 +44,8 @@ export default new Vuex.Store({
       console.log("state: got new board size", payload.boardSize);
       state.boardSize = payload.boardSize;
 
-      // Here needs to init the state
-
-      // Here needs to clear the UI
-      // Don't forget to turn off this flag later when the reset is done
+      // Trigger initialization of the board of the UI
+      // Don't forget to turn this flag off when the reset is done
       state.isResetRequested = true;
     },
     getNextComMove(state) {
