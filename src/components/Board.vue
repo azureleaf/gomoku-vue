@@ -57,10 +57,19 @@ export default {
     winner() {
       return this.$store.state.winner;
     },
+    isResetRequested() {
+      return this.$store.state.isResetRequested;
+    },
   },
   watch: {
     winner() {
       this.isDialogOpen = true;
+    },
+    isResetRequested(newVal, oldVal) {
+      if (oldVal == false && newVal == true) {
+        console.log("Board.vue: Going to reset the UI!");
+        this.initBoard();
+      }
     },
   },
   methods: {
@@ -102,23 +111,30 @@ export default {
         this.boardBools[rowIndex2][colIndex2].isLatestMove = false;
       }
     },
+    initBoard() {
+      // Empty the board
+      this.boardBools = [];
+
+      // Initialize the board for booleans.
+      for (let i = 0; i < this.boardHeight; i++) {
+        this.boardBools.push(
+          // Note that by .fill(Object), every Object will be the reference to each other
+          // So you need to use .map() to keep them independent
+          Array(this.boardWidth)
+            .fill()
+            .map(() => {
+              // at first all the squares are empty
+              return { hasO: false, hasX: false, isLatestMove: false };
+            })
+        );
+      }
+    },
   },
   created() {
-    // Initialize the board for booleans
-    // This process can't be put in "mounted",
-    // because boardBools[] is required for <template> rendering
-    for (let i = 0; i < this.boardHeight; i++) {
-      this.boardBools.push(
-        // Note that by .fill(Object), every Object will be the reference to each other
-        // So you need to use .map() to keep them independent
-        Array(this.boardWidth)
-          .fill()
-          .map(() => {
-            // at first all the squares are empty
-            return { hasO: false, hasX: false, isLatestMove: false };
-          })
-      );
-    }
+    // Note that this process (creation & initialization of the board) can't be put in "mounted",
+    // because boardBools[] is required for <template> rendering.
+    // Therefore this needs to be done prior to rendering.
+    this.initBoard();
   },
 };
 </script>
